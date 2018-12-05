@@ -1,34 +1,34 @@
 const { equal,deepEqual } = require('assert');
 
 const { 
-  getData,
+  getContents,
   parseInputs,
   finalOutput,
   headerText,
   outputForMultipeFiles
 } = require('../src/lib.js');
 
-describe("getData",()=> {
+describe("getContents",()=> {
   it("it should return nothing when we give 0 as input ",()=> {
-    equal(getData("leela",0,"\n"),"");
-    equal(getData("prasanth",0,""),"");
+    equal(getContents("leela",0,"\n"),"");
+    equal(getContents("prasanth",0,""),"");
   });
 
   it("it should return one line if we give 1 as input",()=> {
-    equal(getData("leela\nprasanth",1,'\n'),"leela");
-    equal(getData("head",1,""),"h");
+    equal(getContents("leela\nprasanth",1,'\n'),"leela");
+    equal(getContents("head",1,""),"h");
   });
 
   it("it should return those many number of lines as per input",()=> {
-    equal(getData("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
-    equal(getData("head",4,""),"head");
+    equal(getContents("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
+    equal(getContents("head",4,""),"head");
   });
 
   it("it should return those many number of lines as per input",()=> {
-    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows"
-    let expectedOutPut = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon"
-    equal(getData(input,2,'\n'),expectedOutPut);
-    equal(getData("h\ne\na\nd",4,""),"h\ne\n");
+    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
+    let expectedOutPut = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon";
+    equal(getContents(input,2,'\n'),expectedOutPut);
+    equal(getContents("h\ne\na\nd",4,""),"h\ne\n");
   });
 })
 
