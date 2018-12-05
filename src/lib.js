@@ -1,3 +1,4 @@
+const fs = require('fs');
 const headerText = function(fileName){
   let header = "==> "+ fileName +" <==";
   return header;
@@ -32,8 +33,12 @@ const parseInputs = function(args){
   return orderedInputs;
 }
 
-const finalOutput = function(readFile,args) {
+const finalOutput = function(readFile,args,existsFile) {
   let inputs = parseInputs(args);
+  if(!existsFile(inputs.files[0],"utf-8")){
+    // console.log(inputs.files[0]);
+    return "head: "+inputs.files[0]+": No such file or directory";
+  }
   let content1 = readFile(inputs.files[0],"utf-8");
   let output = getContents(content1,inputs.range,inputs.delimiter);
   if(inputs.files.length > 1) {
@@ -49,7 +54,7 @@ const outputForMultipeFiles = function(readFile,args) {
   let result = "";
   let separator = "\n";
   for(let index = 0; index < inputs.length ; index++){
-    result += headerText(inputs[index])+"\n"+getContents(readFile(inputs[index],"utf-8"),range,delimiter) + "\n"+separator;
+    result += headerText(inputs[index])+"\n"+getContents(readFile(inputs[index],"utf-8"),range,delimiter)+separator +separator;
     separator = "";
   }
   return result;
