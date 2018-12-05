@@ -1,33 +1,34 @@
 const { equal,deepEqual } = require('assert');
+
 const { 
-  getLinesWiseData,
+  getData,
   parseInputs,
   finalOutput,
   headerText,
   outputForMultipeFiles
 } = require('../src/lib.js');
 
-describe("getLinesWiseData",()=> {
+describe("getData",()=> {
   it("it should return nothing when we give 0 as input ",()=> {
-    equal(getLinesWiseData("leela",0,"\n"),"");
-    equal(getLinesWiseData("prasanth",0,""),"");
+    equal(getData("leela",0,"\n"),"");
+    equal(getData("prasanth",0,""),"");
   });
 
   it("it should return one line if we give 1 as input",()=> {
-    equal(getLinesWiseData("leela\nprasanth",1,'\n'),"leela");
-    equal(getLinesWiseData("head",1,""),"h");
+    equal(getData("leela\nprasanth",1,'\n'),"leela");
+    equal(getData("head",1,""),"h");
   });
 
   it("it should return those many number of lines as per input",()=> {
-    equal(getLinesWiseData("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
-    equal(getLinesWiseData("head",4,""),"head");
+    equal(getData("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
+    equal(getData("head",4,""),"head");
   });
 
   it("it should return those many number of lines as per input",()=> {
     let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows"
     let expectedOutPut = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon"
-    equal(getLinesWiseData(input,2,'\n'),expectedOutPut);
-    equal(getLinesWiseData("h\ne\na\nd",4,""),"h\ne\n");
+    equal(getData(input,2,'\n'),expectedOutPut);
+    equal(getData("h\ne\na\nd",4,""),"h\ne\n");
   });
 })
 
