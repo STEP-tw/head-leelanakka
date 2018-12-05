@@ -1,4 +1,3 @@
-const fs = require('fs');
 const headerText = function(fileName){
   let header = "==> "+ fileName +" <==";
   return header;
@@ -16,29 +15,40 @@ const getContents = function(content,noOfLines,delimiter){
 
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
-  if(args[0].slice(0,2) == "-c") {
-    orderedInputs.type = "c";
-    orderedInputs.range = +args[0].slice(2) || args[args.indexOf("-c")+1];
-    orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
-    orderedInputs.delimiter = "";
-    return orderedInputs;
-  } 
-  orderedInputs.range = +args[0] || +args[0].slice(2) || +args[args.indexOf("-n")+1] || 10;
+  orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-n")+1] || 10;
   orderedInputs.range = Math.abs(orderedInputs.range);
+  if(typeof(orderedInputs.range) == "string" || ""+orderedInputs.range == "NaN"){
+    orderedInputs.range = 10;
+  }
+
   if(!+args[0] && args[0][0] != "-") {
     orderedInputs.files = orderedInputs.files.concat(args);
     return orderedInputs;
   }
+
+  if(args[0].slice(0,2) == "-c") {
+    orderedInputs.type = "c";
+    orderedInputs.delimiter = "";
+    orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-c")+1] || 10;
+    orderedInputs.range = Math.abs(orderedInputs.range);
+    orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
+    return orderedInputs;
+  }
+
   orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-n")+2));
   return orderedInputs;
 }
 
 const finalOutput = function(readFile,args,existsFile) {
   let inputs = parseInputs(args);
-  if(!existsFile(inputs.files[0],"utf-8")){
-    // console.log(inputs.files[0]);
+  if(inputs.range == 0 || inputs.files.length == 0){
+    return errorMsg(inputs.range);
+  }
+
+  if(!existsFile(inputs.files[0],"utf-8") || inputs.files[0] == 0){
     return "head: "+inputs.files[0]+": No such file or directory";
   }
+
   let content1 = readFile(inputs.files[0],"utf-8");
   let output = getContents(content1,inputs.range,inputs.delimiter);
   if(inputs.files.length > 1) {
