@@ -20,6 +20,10 @@ const parseInputs = function(args){
   } 
   orderedInputs.range = +args[0] || +args[0].slice(2) || +args[args.indexOf("-n")+1] || 10;
   orderedInputs.range = Math.abs(orderedInputs.range);
+  if(!+args[0] && args[0][0] != "-") {
+    orderedInputs.files = orderedInputs.files.concat(args);
+    return orderedInputs;
+  }
   orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-n")+2));
   return orderedInputs;
 }

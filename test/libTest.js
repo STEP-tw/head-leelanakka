@@ -47,12 +47,12 @@ describe("parseInputs",()=> {
   });
 
   it('should return the type key value as n for no input of type',()=> {
-    deepEqual(parseInputs(["0","file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["10","file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["7","file1"]),{ type:'n',range:7,files:["file1"],delimiter:"\n"});
   });
 
   it('should return the type key value as n for -0 input also',()=> {
-    deepEqual(parseInputs(["-0","file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["-10","file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["-9","file1"]),{ type:'n',range:9,files:["file1"],delimiter:"\n"});
   });
 
@@ -61,13 +61,21 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["-n9","file1"]),{ type:'n',range:9,files:["file1"],delimiter:"\n"});
   });
 
+  it('should return the range 10 and type as n if we dont give any raneg and type',()=> {
+    deepEqual(parseInputs(["file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
+  });
+
 })
 
 describe('headerText',()=> {
+
   it('should return dafault header for no input file name' , ()=> {
     equal(headerText(""),"==> "+ "" +" <==");
   });
+
   it('should reaturn the header text with the input file name',()=> {
     equal(headerText("head.js"),"==> "+ "head.js" +" <==");
   });
+
 });
