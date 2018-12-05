@@ -1,8 +1,9 @@
 const { finalOutput } = require('./src/lib.js');
 
 const fs = require('fs');
-let data = fs.readFileSync(process.argv[4],"utf-8");
-const main = function(args,data) {
-  console.log(finalOutput(args,data));
+
+const main = function(readFile,args) {
+  console.log(finalOutput(readFile,args));
 }
-main(process.argv.slice(2),data);
+
+main(fs.readFileSync,process.argv.slice(2));
