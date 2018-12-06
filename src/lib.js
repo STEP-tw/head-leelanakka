@@ -32,6 +32,9 @@ const parseInputs = function(args){
     orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-c")+1] || 10;
     orderedInputs.range = Math.abs(orderedInputs.range);
     orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
+    if(typeof(orderedInputs.range) == "string" || ""+orderedInputs.range == "NaN"){
+      orderedInputs.range = 10;
+    }
     return orderedInputs;
   }
 
@@ -75,5 +78,6 @@ module.exports = {
   parseInputs,
   finalOutput,
   headerText,
-  outputForMultipeFiles
+  outputForMultipeFiles,
+  errorMsg
 }

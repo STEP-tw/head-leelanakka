@@ -5,7 +5,8 @@ const {
   parseInputs,
   finalOutput,
   headerText,
-  outputForMultipeFiles
+  outputForMultipeFiles,
+  errorMsg
 } = require('../src/lib.js');
 
 describe("getContents",()=> {
@@ -67,6 +68,10 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["-n","0","file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
   });
 
+  // it.only('should return the range 10 and type as n if we dont give any range and type',()=> {
+  //   deepEqual(parseInputs(["-n","0X","file1"]),{ type:'n',range:"NaN",files:["file1"],delimiter:"\n"});
+  // });
+
   it('should return the range 10 and type as n if we dont give any range and type',()=> {
     deepEqual(parseInputs(["file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
@@ -74,6 +79,7 @@ describe("parseInputs",()=> {
 
   it('should return the range 10 and type as we give if we dont give any range',()=> {
     deepEqual(parseInputs(['-n',"file1"]),{ type:'n',range:10,files:[],delimiter:"\n"});
+    deepEqual(parseInputs(['-c',"file1"]),{ type:'c',range:10,files:[],delimiter:""});
     deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
   });
 
@@ -89,4 +95,10 @@ describe('headerText',()=> {
     equal(headerText("head.js"),"==> "+ "head.js" +" <==");
   });
 
+});
+
+describe('errorMsg',()=> {
+  it('should return the default error msg without passing any parameters',()=> {
+    equal(errorMsg(),"head: illegal line count -- 0");
+  });
 });
