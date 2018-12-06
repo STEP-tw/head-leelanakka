@@ -12,13 +12,13 @@ const headContents = function(content,noOfLines,delimiter){
 
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
-  orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-n")+1] || 10;
+  orderedInputs.range = +args[0] ||""+ args[0].slice(2) || ""+args[args.indexOf("-n")+1] || 10;
   if(""+orderedInputs.range == "NaN") {
     orderedInputs.range = "leela";
     return orderedInputs;
   }
 
-  if(args[0].length > 4){
+  if(args[0].length >= 4){
     orderedInputs.range = 10;
   }
 
@@ -45,7 +45,8 @@ const parseInputs = function(args){
 const headOutput = function(readFile,args,existsFile) {
   const {files,range,type,delimiter} = parseInputs(args);
   let message = {c:"byte",n:"line"};
-  if(range == 0 || files.length == 0 || typeof(range) == 'string'){
+
+  if(range == 0 || files.length == 0){
     return "head: illegal "+message[type]+" count -- "+range;
   }
 
