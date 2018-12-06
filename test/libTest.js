@@ -43,9 +43,9 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["-n",1,"file1"]),{ type:'n',range:1,files:["file1"],delimiter:'\n'});
   });
 
-  it('should return the raneg as 0 is user give 0 as range',()=> {
+  it('should return the range as 0 is user give 0 as range',()=> {
     deepEqual(parseInputs(["-n",0,"file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
-    deepEqual(parseInputs(["-n",0,"file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["-c",0,"file1"]),{ type:'c',range:0,files:["file1"],delimiter:""});
   });
 
   it('should return the type key value as n for no input of type',()=> {
@@ -53,9 +53,9 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["7","file1"]),{ type:'n',range:7,files:["file1"],delimiter:"\n"});
   });
 
-  it('should return the type key value as n for -0 input also',()=> {
-    deepEqual(parseInputs(["-10","file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
-    deepEqual(parseInputs(["-9","file1"]),{ type:'n',range:9,files:["file1"],delimiter:"\n"});
+  it('should return the type key value as n for -number input also',()=> {
+    deepEqual(parseInputs(["-10","file1"]),{ type:'n',range:-10,files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["-9","file1"]),{ type:'n',range:-9,files:["file1"],delimiter:"\n"});
   });
 
   it('should return the type and range correctly even we pass combined type and range',()=> {
@@ -63,8 +63,6 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["-n9","file1"]),{ type:'n',range:9,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["-n0","file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["-c0","file1"]),{ type:'c',range:0,files:["file1"],delimiter:""});
-    deepEqual(parseInputs(["-c","0","file1"]),{ type:'c',range:0,files:["file1"],delimiter:""});
-    deepEqual(parseInputs(["-n","0","file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
   });
 
   it('should return the range 10 and type as n if we dont give any range and type',()=> {
@@ -72,9 +70,16 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
   });
 
-  it('should return the range 10 and type as we give if we dont give any range',()=> {
-    deepEqual(parseInputs(['-n',"file1"]),{ type:'n',range:10,files:[],delimiter:"\n"});
-    deepEqual(parseInputs(['-c',"file1"]),{ type:'c',range:10,files:[],delimiter:""});
+  it('should return the range as same the user for wrong input and file names',()=> {
+    deepEqual(parseInputs(["-n","0X","file1"]),{ type:'n',range:"0X",files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["-c","0X","file1"]),{ type:'c',range:"0X",files:["file1"],delimiter:""});
+    deepEqual(parseInputs(["-c0X","file1"]),{ type:'c',range:"0X",files:["file1"],delimiter:""});
+    deepEqual(parseInputs(["-n0X","file1"]),{ type:'n',range:"0X",files:["file1"],delimiter:"\n"});
+  });
+
+  it('should return the range as the file name if the user gives type and doesnt give any number',()=> {
+    deepEqual(parseInputs(['-n',"file1"]),{ type:'n',range:"file1",files:[],delimiter:"\n"});
+    deepEqual(parseInputs(['-c',"file1"]),{ type:'c',range:"file1",files:[],delimiter:""});
     deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
   });
 

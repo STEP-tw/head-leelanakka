@@ -3,21 +3,22 @@ const headerText = function(fileName){
   return header;
 }
 
-const errorMsg = function() {
-  return "head: illegal line count -- 0";
-}
-
 const headContents = function(content,noOfLines,delimiter){
+  noOfLines = Math.abs(noOfLines);
   return content.split(delimiter).
-         slice(0,noOfLines).
-         join(delimiter);
+    slice(0,noOfLines).
+    join(delimiter);
 }
 
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
   orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-n")+1] || 10;
-  orderedInputs.range = Math.abs(orderedInputs.range);
-  if(typeof(orderedInputs.range) == "string" || ""+orderedInputs.range == "NaN"){
+  if(""+orderedInputs.range == "NaN") {
+    orderedInputs.range = "leela";
+    return orderedInputs;
+  }
+
+  if(args[0].length > 4){
     orderedInputs.range = 10;
   }
 
@@ -30,11 +31,11 @@ const parseInputs = function(args){
     orderedInputs.type = "c";
     orderedInputs.delimiter = "";
     orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-c")+1] || 10;
-    orderedInputs.range = Math.abs(orderedInputs.range);
-    orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
-    if(typeof(orderedInputs.range) == "string" || ""+orderedInputs.range == "NaN"){
-      orderedInputs.range = 10;
+    if(""+orderedInputs.range == "NaN") {
+      orderedInputs.range = "leela";
+      return orderedInputs;
     }
+    orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
     return orderedInputs;
   }
   orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-n")+2));
@@ -42,9 +43,10 @@ const parseInputs = function(args){
 }
 
 const headOutput = function(readFile,args,existsFile) {
-  const {files,range,delimiter} = parseInputs(args);
-  if(range == 0 || files.length == 0){
-    return errorMsg();
+  const {files,range,type,delimiter} = parseInputs(args);
+  let message = {c:"byte",n:"line"};
+  if(range == 0 || files.length == 0 || typeof(range) == 'string'){
+    return "head: illegal "+message[type]+" count -- "+range;
   }
 
   if(files.length > 1) {
@@ -79,6 +81,5 @@ module.exports = {
   parseInputs,
   headOutput,
   headerText,
-  outputForMultipeFiles,
-  errorMsg
+  outputForMultipeFiles
 }
