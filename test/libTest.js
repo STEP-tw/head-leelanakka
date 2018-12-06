@@ -1,35 +1,34 @@
 const { equal,deepEqual } = require('assert');
 
 const { 
-  getContents,
+  headContents,
   parseInputs,
-  finalOutput,
+  headOutput,
   headerText,
-  outputForMultipeFiles,
-  errorMsg
+  outputForMultipeFiles
 } = require('../src/lib.js');
 
-describe("getContents",()=> {
+describe("headContents",()=> {
   it("it should return nothing when we give 0 as input ",()=> {
-    equal(getContents("leela",0,"\n"),"");
-    equal(getContents("prasanth",0,""),"");
+    equal(headContents("leela",0,"\n"),"");
+    equal(headContents("prasanth",0,""),"");
   });
 
   it("it should return one line if we give 1 as input",()=> {
-    equal(getContents("leela\nprasanth",1,'\n'),"leela");
-    equal(getContents("head",1,""),"h");
+    equal(headContents("leela\nprasanth",1,'\n'),"leela");
+    equal(headContents("head",1,""),"h");
   });
 
   it("it should return those many number of lines as per input",()=> {
-    equal(getContents("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
-    equal(getContents("head",4,""),"head");
+    equal(headContents("leela\nprasanth\nnakka",2,'\n'),"leela\nprasanth");
+    equal(headContents("head",4,""),"head");
   });
 
   it("it should return those many number of lines as per input",()=> {
     let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
     let expectedOutPut = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon";
-    equal(getContents(input,2,'\n'),expectedOutPut);
-    equal(getContents("h\ne\na\nd",4,""),"h\ne\n");
+    equal(headContents(input,2,'\n'),expectedOutPut);
+    equal(headContents("h\ne\na\nd",4,""),"h\ne\n");
   });
 })
 
@@ -68,10 +67,6 @@ describe("parseInputs",()=> {
     deepEqual(parseInputs(["-n","0","file1"]),{ type:'n',range:0,files:["file1"],delimiter:"\n"});
   });
 
-  // it.only('should return the range 10 and type as n if we dont give any range and type',()=> {
-  //   deepEqual(parseInputs(["-n","0X","file1"]),{ type:'n',range:"NaN",files:["file1"],delimiter:"\n"});
-  // });
-
   it('should return the range 10 and type as n if we dont give any range and type',()=> {
     deepEqual(parseInputs(["file1"]),{ type:'n',range:10,files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["file1","file2","file3"]),{ type:'n',range:10,files:["file1","file2","file3"],delimiter:"\n"});
@@ -97,8 +92,3 @@ describe('headerText',()=> {
 
 });
 
-describe('errorMsg',()=> {
-  it('should return the default error msg without passing any parameters',()=> {
-    equal(errorMsg(),"head: illegal line count -- 0");
-  });
-});

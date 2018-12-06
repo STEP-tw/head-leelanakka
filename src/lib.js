@@ -7,10 +7,10 @@ const errorMsg = function() {
   return "head: illegal line count -- 0";
 }
 
-const getContents = function(content,noOfLines,delimiter){
-  let linesWiseData = content.split(delimiter);
-  linesWiseData = linesWiseData.slice(0,noOfLines);
-  return linesWiseData.join(delimiter);
+const headContents = function(content,noOfLines,delimiter){
+  return content.split(delimiter).
+         slice(0,noOfLines).
+         join(delimiter);
 }
 
 const parseInputs = function(args){
@@ -37,51 +37,47 @@ const parseInputs = function(args){
     }
     return orderedInputs;
   }
-
   orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-n")+2));
   return orderedInputs;
 }
 
-const finalOutput = function(readFile,args,existsFile) {
-  let inputs = parseInputs(args);
-  if(inputs.range == 0 || inputs.files.length == 0){
-    return errorMsg(inputs.range);
+const headOutput = function(readFile,args,existsFile) {
+  const {files,range,delimiter} = parseInputs(args);
+  if(range == 0 || files.length == 0){
+    return errorMsg();
   }
 
-  if(inputs.files.length > 1) {
+  if(files.length > 1) {
     return outputForMultipeFiles(readFile,args,existsFile);
   }
 
-  if(!existsFile(inputs.files[0],"utf-8") || inputs.files[0] == 0){
-    return "head: "+inputs.files[0]+": No such file or directory";
+  if(!existsFile(files[0],"utf-8") || files[0] == 0){
+    return "head: "+files[0]+": No such file or directory";
   }
 
-  let content1 = readFile(inputs.files[0],"utf-8");
-  let output = getContents(content1,inputs.range,inputs.delimiter);
-  return output;
+  let contentOfFile = readFile(files[0],"utf-8");
+  return  headContents(contentOfFile,range,delimiter);
 }
 
 const outputForMultipeFiles = function(readFile,args,existsFile) {
-  let inputs = parseInputs(args).files;
-  let range = parseInputs(args).range;
-  let delimiter = parseInputs(args).delimiter;
+  const { files,range,delimiter} = parseInputs(args);
   let result = [];
   let separator = "\n";
-  for(let index = 0; index < inputs.length ; index++){
-    if(!existsFile(inputs[index],"utf-8")){
-      result.push("head: "+inputs[index]+": No such file or directory");
+  for(let index = 0; index < files.length ; index++){
+    if(!existsFile(files[index],"utf-8")){
+      result.push("head: "+files[index]+": No such file or directory");
       continue;
     }
-    result.push( headerText(inputs[index])+"\n"+getContents(readFile(inputs[index],"utf-8"),range,delimiter));
+    result.push( headerText(files[index])+"\n"+headContents(readFile(files[index],"utf-8"),range,delimiter));
     separator = "";
   }
   return result.join('\n');
 }
 
 module.exports = {
-  getContents,
+  headContents,
   parseInputs,
-  finalOutput,
+  headOutput,
   headerText,
   outputForMultipeFiles,
   errorMsg
