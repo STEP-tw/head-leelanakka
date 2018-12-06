@@ -73,8 +73,8 @@ describe("parseInputs",()=> {
   it('should return the range as same the user for wrong input and file names',()=> {
     deepEqual(parseInputs(["-n","0X","file1"]),{ type:'n',range:"0X",files:["file1"],delimiter:"\n"});
     deepEqual(parseInputs(["-c","0X","file1"]),{ type:'c',range:"0X",files:["file1"],delimiter:""});
-    // deepEqual(parseInputs(["-c10X","file1"]),{ type:'c',range:"10X",files:["file1"],delimiter:""});
-    // deepEqual(parseInputs(["-n10X","file1"]),{ type:'n',range:"10X",files:["file1"],delimiter:"\n"});
+    deepEqual(parseInputs(["-c10X","file1"]),{ type:'c',range:"10X",files:["file1"],delimiter:""});
+    deepEqual(parseInputs(["-n0X","file1"]),{ type:'n',range:"0X",files:["file1"],delimiter:"\n"});
   });
 
   it('should return the range as the file name if the user gives type and doesnt give any number',()=> {

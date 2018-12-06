@@ -18,7 +18,7 @@ const parseInputs = function(args){
     return orderedInputs;
   }
 
-  if(args[0].length >= 4){
+  if(args[0].length >= 5){
     orderedInputs.range = 10;
   }
 
@@ -45,8 +45,7 @@ const parseInputs = function(args){
 const headOutput = function(readFile,args,existsFile) {
   const {files,range,type,delimiter} = parseInputs(args);
   let message = {c:"byte",n:"line"};
-
-  if(range == 0 || files.length == 0){
+  if(range == 0 || files.length == 0 || typeof(+range.slice(-1)) == 'string'){
     return "head: illegal "+message[type]+" count -- "+range;
   }
 
@@ -57,7 +56,6 @@ const headOutput = function(readFile,args,existsFile) {
   if(!existsFile(files[0],"utf-8") || files[0] == 0){
     return "head: "+files[0]+": No such file or directory";
   }
-
   let contentOfFile = readFile(files[0],"utf-8");
   return  headContents(contentOfFile,range,delimiter);
 }
