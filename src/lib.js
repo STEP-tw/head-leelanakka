@@ -48,29 +48,34 @@ const finalOutput = function(readFile,args,existsFile) {
     return errorMsg(inputs.range);
   }
 
+  if(inputs.files.length > 1) {
+    return outputForMultipeFiles(readFile,args,existsFile);
+  }
+
   if(!existsFile(inputs.files[0],"utf-8") || inputs.files[0] == 0){
     return "head: "+inputs.files[0]+": No such file or directory";
   }
 
   let content1 = readFile(inputs.files[0],"utf-8");
   let output = getContents(content1,inputs.range,inputs.delimiter);
-  if(inputs.files.length > 1) {
-    return outputForMultipeFiles(readFile,args);
-  }
   return output;
 }
 
-const outputForMultipeFiles = function(readFile,args) {
+const outputForMultipeFiles = function(readFile,args,existsFile) {
   let inputs = parseInputs(args).files;
   let range = parseInputs(args).range;
   let delimiter = parseInputs(args).delimiter;
-  let result = "";
+  let result = [];
   let separator = "\n";
   for(let index = 0; index < inputs.length ; index++){
-    result += headerText(inputs[index])+"\n"+getContents(readFile(inputs[index],"utf-8"),range,delimiter)+separator +separator;
+    if(!existsFile(inputs[index],"utf-8")){
+      result.push("head: "+inputs[index]+": No such file or directory");
+      continue;
+    }
+    result.push( headerText(inputs[index])+"\n"+getContents(readFile(inputs[index],"utf-8"),range,delimiter));
     separator = "";
   }
-  return result;
+  return result.join('\n');
 }
 
 module.exports = {
