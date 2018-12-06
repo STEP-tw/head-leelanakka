@@ -18,7 +18,7 @@ const parseInputs = function(args){
     return orderedInputs;
   }
 
-  if(args[0].length >= 5){
+  if(args[0].length >= 4){
     orderedInputs.range = 10;
   }
 
