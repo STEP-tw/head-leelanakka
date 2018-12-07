@@ -17,7 +17,7 @@ const extractInputsRange = function(args,type) {
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
   orderedInputs.range = extractInputsRange(args,orderedInputs.type);
-  if(args[0].length >= 4){
+  if(args[0].length > 5){
     orderedInputs.range = 10;
   }
 
@@ -40,7 +40,7 @@ const parseInputs = function(args){
 const headOutput = function(readFile,args,existsFile) {
   const {files,range,type,delimiter} = parseInputs(args);
   let message = {c:"byte",n:"line"};
-  if(range == 0 || files.length == 0 ||""+(+range)=="NaN"){
+  if(range == 0 || files.length == 0 || ""+(+range)=="NaN"){
     return "head: illegal "+message[type]+" count -- "+range;
   }
 
