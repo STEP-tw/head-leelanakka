@@ -48,6 +48,10 @@ describe("headOutput", () => {
       headOutput(reader, ["-n2", "file1", "file2"], existsFile),
       "==> file1 <==\nfile1\n==> file2 <==\nfile2"
     );
+    deepEqual(
+      headOutput(reader, ["-n2", "file1", "file2"], notExistsFile),
+      'head: file1: No such file or directory\nhead: file2: No such file or directory'
+    );
   });
 });
 
