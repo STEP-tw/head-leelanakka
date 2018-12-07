@@ -10,14 +10,13 @@ const headContents = function(content,noOfLines,delimiter){
     join(delimiter);
 }
 
+const extractInputsRange = function(args,type) {
+  return +args[0] ||""+ args[0].slice(2) || ""+args[args.indexOf("-"+type)+1] || 10;
+}
+
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
-  orderedInputs.range = +args[0] ||""+ args[0].slice(2) || ""+args[args.indexOf("-n")+1] || 10;
-  if(""+orderedInputs.range == "NaN") {
-    orderedInputs.range = "leela";
-    return orderedInputs;
-  }
-
+  orderedInputs.range = extractInputsRange(args,orderedInputs.type);
   if(args[0].length >= 4){
     orderedInputs.range = 10;
   }
@@ -30,11 +29,7 @@ const parseInputs = function(args){
   if(args[0].slice(0,2) == "-c") {
     orderedInputs.type = "c";
     orderedInputs.delimiter = "";
-    orderedInputs.range = +args[0] || ""+args[0].slice(2) || ""+args[args.indexOf("-c")+1] || 10;
-    if(""+orderedInputs.range == "NaN") {
-      orderedInputs.range = "leela";
-      return orderedInputs;
-    }
+    orderedInputs.range = extractInputsRange(args,orderedInputs.type);
     orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
     return orderedInputs;
   }
