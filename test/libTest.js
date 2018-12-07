@@ -4,7 +4,8 @@ const {
   headContents,
   parseInputs,
   headerText,
-  headOutput
+  headOutput,
+  take
 } = require("../src/lib.js");
 
 const reader = file => file;
@@ -240,5 +241,24 @@ describe("headerText", () => {
 
   it("should reaturn the header text with the input file name", () => {
     equal(headerText("head.js"), "==> " + "head.js" + " <==");
+  });
+});
+
+describe('headerText',() => {
+  it('should return the header text with the file name',() => {
+    equal(headerText("file"),"==> file <==");
+  });
+  it('should return the header text with empty if user gives no file name',() => {
+    equal(headerText(""),"==>  <==");
+  });
+});
+
+describe('take',() => {
+  it('should slice the array from 0 to given upper limit',() => {
+    deepEqual(take([1,2,3],2),[1,2]);
+    deepEqual(take([1,2,3],1),[1]);
+  });
+  it('should return the empty array if we give 0 as upper limit',() => {
+    deepEqual(take([1,2,3],0),[]);
   });
 });

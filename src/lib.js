@@ -1,14 +1,15 @@
 const headerText = function(fileName) {
-  let header = "==> " + fileName + " <==";
-  return header;
+  return header = "==> " + fileName + " <==";
 };
 
-const headContents = function(content, noOfLines, delimiter) {
-  noOfLines = Math.abs(noOfLines);
-  return content
-    .split(delimiter)
-    .slice(0, noOfLines)
-    .join(delimiter);
+const take = function(array,upperLimit){
+  return array.slice(0,upperLimit);
+}
+
+const headContents = function(string, noOfLines, delimiter) {
+  let content = string.split(delimiter);
+  return take(content, noOfLines).
+    join(delimiter);
 };
 
 const extractInputsRange = function(args, type) {
@@ -41,13 +42,14 @@ const parseInputs = function(args) {
 };
 
 const headOutput = function(readFile, args, existsFile) {
-  const { files, range, type, delimiter } = parseInputs(args);
+  let { files, range, type, delimiter } = parseInputs(args);
   let result = [];
   let separator = "\n";
   let message = { c: "byte", n: "line" };
   if (range == 0 || files.length == 0 || "" + +range == "NaN") {
     return "head: illegal " + message[type] + " count -- " + range;
   }
+  range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {
     if (!existsFile(files[index], "utf-8")) {
       result.push("head: " + files[index] + ": No such file or directory");
@@ -59,8 +61,8 @@ const headOutput = function(readFile, args, existsFile) {
     if (files.length > 1) {
       result.push(
         headerText(files[index]) +
-          "\n" +
-          headContents(readFile(files[index], "utf-8"), range, delimiter)
+        "\n" +
+        headContents(readFile(files[index], "utf-8"), range, delimiter)
       );
       separator = "";
     }
@@ -72,5 +74,7 @@ module.exports = {
   headContents,
   parseInputs,
   headerText,
-  headOutput
+  headOutput,
+  headerText,
+  take
 };
