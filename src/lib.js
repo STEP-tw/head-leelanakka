@@ -17,12 +17,10 @@ const extractInputsRange = function(args,type) {
 const parseInputs = function(args){
   let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
   orderedInputs.range = extractInputsRange(args,orderedInputs.type);
-  if(args[0].length > 5){
-    orderedInputs.range = 10;
-  }
 
   if(!+args[0] && args[0][0] != "-") {
     orderedInputs.files = orderedInputs.files.concat(args);
+    orderedInputs.range = 10;
     return orderedInputs;
   }
 
