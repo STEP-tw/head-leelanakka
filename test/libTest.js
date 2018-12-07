@@ -26,12 +26,12 @@ describe('headOutput',()=> {
   it('should return the file content by line wise count for input arguement as -c',() => {
     deepEqual(headOutput(reader,["-n2","file1"],notExistsFile),"head: file1: No such file or directory");
   });
-
-})
-
-describe('headOutput',() => {
   it('should return the output for multiple files',() => {
     deepEqual(headOutput(reader,["-c2","file1"],existsFile),"fi");
+  });
+  it('should return file contents for the multiple files',() => {
+    deepEqual(headOutput(reader,["-c2","file1","file2"],existsFile),"==> file1 <==\nfi\n==> file2 <==\nfi");
+    deepEqual(headOutput(reader,["-n2","file1","file2"],existsFile),"==> file1 <==\nfile1\n==> file2 <==\nfile2");
   });
 })
 

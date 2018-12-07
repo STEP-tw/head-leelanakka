@@ -11,7 +11,7 @@ const headContents = function(content,noOfLines,delimiter){
 }
 
 const extractInputsRange = function(args,type) {
-  return +args[0] ||""+ args[0].slice(2) || ""+args[args.indexOf("-"+type)+1] || 10;
+  return +args[0] ||""+ args[0].slice(2) || ""+args[args.indexOf("-"+type)+1] ;
 }
 
 const parseInputs = function(args){
@@ -48,12 +48,13 @@ const headOutput = function(readFile,args,existsFile) {
       result.push("head: "+files[index]+": No such file or directory");
       continue;
     }
+    if(files.length == 1 ){
+      return headContents(readFile(files[0],"utf-8"),range,delimiter);
+    }
     if(files.length>1){
       result.push( headerText(files[index])+"\n"+headContents(readFile(files[index],"utf-8"),range,delimiter));
       separator = "";
-    } else {
-      return headContents(readFile(files[0],"utf-8"),range,delimiter);
-    }
+    } 
   }
   return result.join('\n');
 }
