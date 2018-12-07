@@ -12,15 +12,19 @@ const headContents = function(string, noOfLines, delimiter) {
     join(delimiter);
 };
 
-const extractInputsRange = function(args, type) {
+const extractNumber = function(args, type) {
   return (
-    +args[0] || "" + args[0].slice(2) || "" + args[args.indexOf("-" + type) + 1]
+    +args[0] || args[0].slice(2) || args[args.indexOf("-" + type) + 1]
   );
 };
 
+const extractFiles = function(args,type){
+  return [].concat(args.slice(args.indexOf("-"+type)+2));
+}
+
 const parseInputs = function(args) {
   let type = "n";
-  let range = extractInputsRange(args, type);
+  let range = extractNumber(args, type);
   let files = [];
   let delimiter = "\n";
 
@@ -33,11 +37,11 @@ const parseInputs = function(args) {
   if (args[0].slice(0, 2) == "-c") {
     type = "c";
     delimiter = "";
-    range = extractInputsRange(args, type);
-    files = files.concat(args.slice(args.indexOf("-c") + 2));
+    range = extractNumber(args, type);
+    files = extractFiles(args,type);
     return { type, range, files, delimiter };
   }
-  files = files.concat(args.slice(args.indexOf("-n") + 2));
+  files = extractFiles(args,type);
   return { type, range, files, delimiter };
 };
 
@@ -76,5 +80,7 @@ module.exports = {
   headerText,
   headOutput,
   headerText,
-  take
+  take,
+  extractNumber,
+  extractFiles
 };

@@ -5,7 +5,9 @@ const {
   parseInputs,
   headerText,
   headOutput,
-  take
+  take,
+  extractNumber,
+  extractFiles
 } = require("../src/lib.js");
 
 const reader = file => file;
@@ -262,3 +264,12 @@ describe('take',() => {
     deepEqual(take([1,2,3],0),[]);
   });
 });
+
+describe('extractNumber',() => {
+  it('should return only number in an array of elements',() => {
+    deepEqual(extractNumber([2,"file"],""),2);
+    deepEqual(extractNumber([-2,"file"],""),-2);
+    deepEqual(extractNumber(["-c2","file"],"n"),2);
+    deepEqual(extractNumber(["-r2","file"],"n"),2);
+  });
+})
