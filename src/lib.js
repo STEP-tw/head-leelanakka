@@ -15,24 +15,26 @@ const extractInputsRange = function(args,type) {
 }
 
 const parseInputs = function(args){
-  let orderedInputs = { type:'n',range:10,files:[],delimiter:"\n"};
-  orderedInputs.range = extractInputsRange(args,orderedInputs.type);
+  let type = 'n';
+  let range = extractInputsRange(args,type);
+  let files =[];
+  let delimiter = '\n';
 
   if(!+args[0] && args[0][0] != "-") {
-    orderedInputs.files = orderedInputs.files.concat(args);
-    orderedInputs.range = 10;
-    return orderedInputs;
+    files = files.concat(args);
+    range = 10;
+    return {type,range,files,delimiter};
   }
 
   if(args[0].slice(0,2) == "-c") {
-    orderedInputs.type = "c";
-    orderedInputs.delimiter = "";
-    orderedInputs.range = extractInputsRange(args,orderedInputs.type);
-    orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-c")+2));
-    return orderedInputs;
+    type = "c";
+    delimiter = "";
+    range = extractInputsRange(args,type);
+    files = files.concat(args.slice(args.indexOf("-c")+2));
+    return {type,range,files,delimiter};
   }
-  orderedInputs.files = orderedInputs.files.concat(args.slice(args.indexOf("-n")+2));
-  return orderedInputs;
+  files = files.concat(args.slice(args.indexOf("-n")+2));
+  return {type,range,files,delimiter};
 }
 
 const headOutput = function(readFile,args,existsFile) {
