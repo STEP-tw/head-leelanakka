@@ -36,34 +36,24 @@ const parseInputs = function(args){
 }
 
 const headOutput = function(readFile,args,existsFile) {
-  const {files,range,type,delimiter} = parseInputs(args);
+  const { files,range,type,delimiter} = parseInputs(args);
+  let result = [];
+  let separator = "\n";
   let message = {c:"byte",n:"line"};
   if(range == 0 || files.length == 0 || ""+(+range)=="NaN"){
     return "head: illegal "+message[type]+" count -- "+range;
   }
-
-  if(files.length > 1) {
-    return outputForMultipeFiles(readFile,args,existsFile);
-  }
-
-  if(!existsFile(files[0],"utf-8") || files[0] == 0){
-    return "head: "+files[0]+": No such file or directory";
-  }
-  let contentOfFile = readFile(files[0],"utf-8");
-  return  headContents(contentOfFile,range,delimiter);
-}
-
-const outputForMultipeFiles = function(readFile,args,existsFile) {
-  const { files,range,delimiter} = parseInputs(args);
-  let result = [];
-  let separator = "\n";
   for(let index = 0; index < files.length ; index++){
     if(!existsFile(files[index],"utf-8")){
       result.push("head: "+files[index]+": No such file or directory");
       continue;
     }
-    result.push( headerText(files[index])+"\n"+headContents(readFile(files[index],"utf-8"),range,delimiter));
-    separator = "";
+    if(files.length>1){
+      result.push( headerText(files[index])+"\n"+headContents(readFile(files[index],"utf-8"),range,delimiter));
+      separator = "";
+    } else {
+      return headContents(readFile(files[0],"utf-8"),range,delimiter);
+    }
   }
   return result.join('\n');
 }
@@ -71,7 +61,6 @@ const outputForMultipeFiles = function(readFile,args,existsFile) {
 module.exports = {
   headContents,
   parseInputs,
-  headOutput,
   headerText,
-  outputForMultipeFiles
+  headOutput
 }

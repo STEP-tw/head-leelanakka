@@ -3,10 +3,37 @@ const { equal,deepEqual } = require('assert');
 const { 
   headContents,
   parseInputs,
-  headOutput,
   headerText,
-  outputForMultipeFiles
+  headOutput
 } = require('../src/lib.js');
+
+const reader = (file) => file;
+
+const existsFile = x => true;
+const notExistsFile = x => false;
+
+describe('headOutput',()=> {
+
+  it('should return the file content by bite wise count for input arguement as -c',() => {
+    deepEqual(headOutput(reader,["-c2","file1"],existsFile),"fi");
+  });
+  it('should return the error message for the invalid arguements',() => {
+    deepEqual(headOutput(reader,["-c","file1"],existsFile),"head: illegal byte count -- file1");
+  })
+  it('should return the file content by line wise count for input arguement as -c',() => {
+    deepEqual(headOutput(reader,["-n2","file1"],existsFile),"file1");
+  });
+  it('should return the file content by line wise count for input arguement as -c',() => {
+    deepEqual(headOutput(reader,["-n2","file1"],notExistsFile),"head: file1: No such file or directory");
+  });
+
+})
+
+describe('headOutput',() => {
+  it('should return the output for multiple files',() => {
+    deepEqual(headOutput(reader,["-c2","file1"],existsFile),"fi");
+  });
+})
 
 describe("headContents",()=> {
   it("it should return nothing when we give 0 as input ",()=> {
@@ -96,4 +123,3 @@ describe('headerText',()=> {
   });
 
 });
-
