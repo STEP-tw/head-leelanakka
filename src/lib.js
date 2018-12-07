@@ -40,7 +40,7 @@ const parseInputs = function(args){
 const headOutput = function(readFile,args,existsFile) {
   const {files,range,type,delimiter} = parseInputs(args);
   let message = {c:"byte",n:"line"};
-  if(range == 0 || files.length == 0){
+  if(range == 0 || files.length == 0 ||""+(+range)=="NaN"){
     return "head: illegal "+message[type]+" count -- "+range;
   }
 
