@@ -292,7 +292,7 @@ describe('invalidRangeMessage',() => {
 
 describe('invalidFilesMessage',() => {
   it('should return the error message with the given file name',() => {
-    equal(invalidFilesMessage("file"),"head: file: No such file or directory");
-    equal(invalidFilesMessage("leela"),"head: leela: No such file or directory");
+    equal(invalidFilesMessage("file",'head'),"head: file: No such file or directory");
+    equal(invalidFilesMessage("leela",'tail'),"tail: leela: No such file or directory");
   });
 })

@@ -54,10 +54,9 @@ const invalidRangeMessage = function(type,range,functionName){
   return functionName+": illegal " + message[type] + " count -- " + range;
 }
 
-const invalidFilesMessage = function(fileName){
-  return "head: " + fileName + ": No such file or directory";
+const invalidFilesMessage = function(fileName,functionName){
+  return functionName+": " + fileName + ": No such file or directory";
 }
-
 const headOutput = function(readFile, args, existsFile) {
   let { files, range, type, delimiter } = parseInputs(args);
   let result = [];
@@ -68,7 +67,7 @@ const headOutput = function(readFile, args, existsFile) {
   range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {
     if (!existsFile(files[index], "utf-8")) {
-      result.push(invalidFilesMessage(files[index]));
+      result.push(invalidFilesMessage(files[index],"head"));
       continue;
     }
     if (files.length == 1) {
