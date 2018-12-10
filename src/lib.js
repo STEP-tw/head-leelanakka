@@ -49,9 +49,9 @@ const isValidRange = function(files,range){
   return range == 0 || files.length == 0 || "" + +range == "NaN";
 }
 
-const invalidRangeMessage = function(type,range){
+const invalidRangeMessage = function(type,range,functionName){
   let message = { c: "byte", n: "line" };
-  return "head: illegal " + message[type] + " count -- " + range;
+  return functionName+": illegal " + message[type] + " count -- " + range;
 }
 
 const invalidFilesMessage = function(fileName){
@@ -63,7 +63,7 @@ const headOutput = function(readFile, args, existsFile) {
   let result = [];
   let separator = "\n";
   if (isValidRange(files,range)) {
-    return invalidRangeMessage(type,range);
+    return invalidRangeMessage(type,range,'head');
   }
   range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {
@@ -94,7 +94,6 @@ module.exports = {
   headerText,
   take,
   extractNumber,
-  extractFiles,
   invalidRangeMessage,
   invalidFilesMessage
 };

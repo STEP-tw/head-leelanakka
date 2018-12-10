@@ -7,7 +7,6 @@ const {
   headOutput,
   take,
   extractNumber,
-  extractFiles,
   invalidRangeMessage,
   invalidFilesMessage
 } = require("../src/lib.js");
@@ -282,12 +281,12 @@ describe('extractNumber',() => {
 
 describe('invalidRangeMessage',() => {
   it('should return the illegal line count for input of type n',() => {
-    equal(invalidRangeMessage("n",""),"head: illegal line count -- ");
-    equal(invalidRangeMessage("n","-10X"),"head: illegal line count -- -10X");
+    equal(invalidRangeMessage("n","",'head'),"head: illegal line count -- ");
+    equal(invalidRangeMessage("n","-10X",'tail'),"tail: illegal line count -- -10X");
   });
   it('should return the illegal byte count for input of type c',() => {
-    equal(invalidRangeMessage("c",""),"head: illegal byte count -- ");
-    equal(invalidRangeMessage("c","-10X"),"head: illegal byte count -- -10X");
+    equal(invalidRangeMessage("c","",'head'),"head: illegal byte count -- ");
+    equal(invalidRangeMessage("c","-10X",'tail'),"tail: illegal byte count -- -10X");
   });
 });
 
