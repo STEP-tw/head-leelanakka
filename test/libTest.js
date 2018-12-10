@@ -8,7 +8,8 @@ const {
   take,
   extractNumber,
   invalidRangeMessage,
-  invalidFilesMessage
+  invalidFilesMessage,
+  tailContents
 } = require("../src/lib.js");
 
 const reader = file => file;
