@@ -12,8 +12,8 @@ const headContents = function(string, noOfLines, delimiter) {
 };
 
 const tailContents = function(string, noOfLines, delimiter) {
-  return content = string.split(delimiter).
-    slice(-noOfLines).join(delimiter);
+  let content = string.split(delimiter)
+    return content.slice(content.length-noOfLines,content.length).join(delimiter);
 };
 
 const extractNumber = function(args, type) {
@@ -52,7 +52,7 @@ const isValidRange = function(files, range) {
 };
 
 const invalidRangeMessage = function(type, range, functionName) {
-  let message = { c: "byte", n: "line" };
+  let message = { c: "byte", n: "line" ,tail:"offset"};
   return functionName + ": illegal " + message[type] + " count -- " + range;
 };
 
@@ -90,9 +90,11 @@ const headOutput = function(readFile, args, existsFile) {
 const tailOutput = function(readFile, args, existsFile) {
   let { files, range, type, delimiter } = parseInputs(args);
   let result = [];
-  let separator = "\n";
+  if(range == 0){
+    return ""
+  }
   if (isValidRange(files, range)) {
-    return invalidRangeMessage(type, range, "tail");
+    return invalidRangeMessage("tail", range, "tail");
   }
   range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {

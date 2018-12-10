@@ -81,6 +81,24 @@ describe("headContents", () => {
   });
 });
 
+describe('tailContents',() => {
+  it('should return nothing when we give 0 as input',() => {
+    equal(tailContents('leela',0,''),"");
+    equal(tailContents('leela',0,'\n'),"");
+  });
+  it('should return the last character of the file',() => {
+    equal(tailContents('leela',1,''),"a");
+    equal(tailContents('leela\nprasanth',1,'\n'),"prasanth");
+  });
+  it('should return the content based on the delimiter',() => {
+    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
+    equal(tailContents(input,2,''),"ws");
+    equal(tailContents(input,9,''),"e windows");
+    equal(tailContents(input,1,'\n'),"He forbade affixed parties of assured to me windows");
+    equal(tailContents(input,2,'\n'),"Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows");
+  });
+});
+
 describe("parseInputs", () => {
   it("should return the default parsed inputs as per the given input", () => {
     deepEqual(parseInputs(["-c", 10, "file1"]), {
@@ -288,6 +306,10 @@ describe('invalidRangeMessage',() => {
   it('should return the illegal byte count for input of type c',() => {
     equal(invalidRangeMessage("c","",'head'),"head: illegal byte count -- ");
     equal(invalidRangeMessage("c","-10X",'tail'),"tail: illegal byte count -- -10X");
+  });
+  it('should return the illegal offset count for input as tail',() => {
+    equal(invalidRangeMessage("tail","",'head'),"head: illegal offset count -- ");
+    equal(invalidRangeMessage("tail","-10X",'tail'),"tail: illegal offset count -- -10X");
   });
 });
 
