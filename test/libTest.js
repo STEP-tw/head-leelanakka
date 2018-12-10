@@ -97,6 +97,10 @@ describe('tailContents',() => {
     equal(tailContents(input,1,'\n'),"He forbade affixed parties of assured to me windows");
     equal(tailContents(input,2,'\n'),"Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows");
   });
+  it('should tail the contents based on the number and delimiter',() => {
+    equal(tailContents("h\ne\na\nd", 2, "\n"), "a\nd");
+    equal(tailContents("h\ne\na\nd", 2, ""), "\nd");
+  });
 });
 
 describe("parseInputs", () => {
@@ -308,8 +312,8 @@ describe('invalidRangeMessage',() => {
     equal(invalidRangeMessage("c","-10X",'tail'),"tail: illegal byte count -- -10X");
   });
   it('should return the illegal offset count for input as tail',() => {
-    equal(invalidRangeMessage("tail","",'head'),"head: illegal offset count -- ");
-    equal(invalidRangeMessage("tail","-10X",'tail'),"tail: illegal offset count -- -10X");
+    equal(invalidRangeMessage("tail","",'tail'),"tail: illegal offset -- ");
+    equal(invalidRangeMessage("tail","-10X",'tail'),"tail: illegal offset -- -10X");
   });
 });
 
