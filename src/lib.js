@@ -12,8 +12,9 @@ const headContents = function(string, noOfLines, delimiter) {
 };
 
 const tailContents = function(string, noOfLines, delimiter) {
-  let content = string.split(delimiter);
-  return content.slice(content.length - noOfLines).join(delimiter);
+  let content = string.split(delimiter)
+  if(delimiter == '\n'){ content.pop()};
+  return content.slice(-noOfLines).join(delimiter);
 };
 
 const extractNumber = function(args, type) {
@@ -47,7 +48,7 @@ const parseInputs = function(args) {
   return { type, range, files, delimiter };
 };
 
-const isValidRange = function(files, range) {
+const isInvalidRange = function(files, range) {
   return range == 0 || files.length == 0 || "" + +range == "NaN";
 };
 
@@ -62,8 +63,7 @@ const invalidFilesMessage = function(fileName, functionName) {
 const headOutput = function(readFile, args, existsFile) {
   let { files, range, type, delimiter } = parseInputs(args);
   let result = [];
-  let separator = "\n";
-  if (isValidRange(files, range)) {
+  if (isInvalidRange(files, range)) {
     return invalidRangeMessage(type, range, "head");
   }
   range = Math.abs(range);
@@ -93,14 +93,13 @@ const tailOutput = function(readFile, args, existsFile) {
   if (range == 0) {
     return "";
   }
-  if (isValidRange(files, range)) {
+  if (isNaN(range)) {
     return invalidRangeMessage("tail", range, "tail");
   }
   range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {
     if (!existsFile(files[index], "utf-8")) {
       result.push(invalidFilesMessage(files[index], "tail"));
-      result.push("\n");
       continue;
     }
     if (files.length == 1) {
@@ -115,7 +114,7 @@ const tailOutput = function(readFile, args, existsFile) {
       separator = "";
     }
   }
-  return result.join("");
+  return result.join("\n");
 };
 
 module.exports = {
