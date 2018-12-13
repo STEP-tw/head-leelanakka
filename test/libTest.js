@@ -84,17 +84,17 @@ describe("headContents", () => {
 describe('tailContents',() => {
   it('should return the last character of the file',() => {
     equal(tailContents('leela',1,''),"a");
-    equal(tailContents('leela\nprasanth\n',1,'\n'),"prasanth");
+    equal(tailContents('leela\nprasanth',1,'\n'),"prasanth");
   });
   it('should return the content based on the delimiter',() => {
-    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows\n";
-    equal(tailContents(input,2,''),"s\n");
-    equal(tailContents(input,9,'')," windows\n");
+    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
+    equal(tailContents(input,2,''),"ws");
+    equal(tailContents(input,9,''),"e windows");
     equal(tailContents(input,1,'\n'),"He forbade affixed parties of assured to me windows");
     equal(tailContents(input,2,'\n'),"Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows");
   });
   it('should tail the contents based on the number and delimiter',() => {
-    equal(tailContents("h\ne\na\nd", 2, "\n"), "e\na");
+    equal(tailContents("h\ne\na\nd", 2, "\n"), "a\nd");
     equal(tailContents("h\ne\na\nd", 2, ""), "\nd");
   });
 });

@@ -12,9 +12,15 @@ const headContents = function(string, noOfLines, delimiter) {
 };
 
 const tailContents = function(string, noOfLines, delimiter) {
-  let content = string.split(delimiter)
-  if(delimiter == '\n'){ content.pop()};
-  return content.slice(-noOfLines).join(delimiter);
+  let content = string.split(delimiter).reverse();
+  if (content[0] == "") {
+    content = content.slice(1);
+  }
+  content = content.join(delimiter);
+  return headContents(content, noOfLines, delimiter)
+    .split(delimiter)
+    .reverse()
+    .join(delimiter);
 };
 
 const extractNumber = function(args, type) {
@@ -98,18 +104,19 @@ const tailOutput = function(readFile, args, existsFile) {
   }
   range = Math.abs(range);
   for (let index = 0; index < files.length; index++) {
-    if (!existsFile(files[index], "utf-8")) {
+    if (!existsFile(files[index], "utf8")) {
       result.push(invalidFilesMessage(files[index], "tail"));
       continue;
     }
     if (files.length == 1) {
-      return tailContents(readFile(files[0], "utf-8"), range, delimiter);
+      console.log(readFile(files[0], "utf8"));
+      return tailContents(readFile(files[0], "utf8"), range, delimiter);
     }
     if (files.length > 1) {
       result.push(
         headerText(files[index]) +
           "\n" +
-          tailContents(readFile(files[index], "utf-8"), range, delimiter)
+          tailContents(readFile(files[index], "utf8"), range, delimiter)
       );
       separator = "";
     }
