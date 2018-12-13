@@ -13,16 +13,12 @@ const headContents = function(string, noOfLines, delimiter) {
 
 const tailContents = function(string, noOfLines, delimiter) {
   let content = string.split(delimiter).reverse();
-  if (content[0] == "") {
+  if (content[0] == ""){
     content = content.slice(1);
   }
-  content = content.join(delimiter);
-  return headContents(content, noOfLines, delimiter)
-    .split(delimiter)
-    .reverse()
-    .join(delimiter);
+  content = content.slice(0,noOfLines).reverse();
+  return content.join(delimiter);
 };
-
 const extractNumber = function(args, type) {
   return +args[0] || args[0].slice(2) || args[args.indexOf("-" + type) + 1];
 };
@@ -109,7 +105,6 @@ const tailOutput = function(readFile, args, existsFile) {
       continue;
     }
     if (files.length == 1) {
-      console.log(readFile(files[0], "utf8"));
       return tailContents(readFile(files[0], "utf8"), range, delimiter);
     }
     if (files.length > 1) {
