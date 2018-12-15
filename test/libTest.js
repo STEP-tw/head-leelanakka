@@ -76,6 +76,16 @@ describe("getOutputContent", () => {
       ""
     );
   });
+  it("should return illegal type count for 0 and head as input", () => {
+    deepEqual(
+      getOutputContent(reader, ["-n0", "file1"], existsFile, "head"),
+      "head: illegal line count -- 0"
+    );
+    deepEqual(
+      getOutputContent(reader, ["-c0", "file1"], existsFile, "head"),
+      "head: illegal byte count -- 0"
+    );
+  });
   it("should return empty string for 0 as the input", () => {
     deepEqual(
       getOutputContent(reader, ["-c1", "file1"], existsFile, "tail"),

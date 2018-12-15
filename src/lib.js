@@ -77,7 +77,7 @@ const getOutputContent = function(readFile, args, existsFile, option) {
     return "";
   }
 
-  if (isNaN(range)) {
+  if (isNaN(range) || range == 0) {
     return invalidRangeMessage(type, range, option);
   }
 
