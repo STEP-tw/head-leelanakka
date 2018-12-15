@@ -97,23 +97,21 @@ const tailOutput = function(readFile, args, existsFile) {
     return invalidRangeMessage("tail", range, "tail");
   }
   range = Math.abs(range);
-  for (let index = 0; index < files.length; index++) {
-    if (!existsFile(files[index], "utf8")) {
-      result.push(invalidFilesMessage(files[index], "tail"));
-      continue;
+  result = files.map(function(file){
+    if (!existsFile(file, "utf8")) {
+      return (invalidFilesMessage(file, "tail"));
     }
     if (files.length == 1) {
-      return tailContents(readFile(files[0], "utf8"), range, delimiter);
+      return tailContents(readFile(file, "utf8"), range, delimiter);
     }
     if (files.length > 1) {
-      result.push(
-        headerText(files[index]) +
+      return(
+        headerText(file) +
           "\n" +
-          tailContents(readFile(files[index], "utf8"), range, delimiter)
+          tailContents(readFile(file, "utf8"), range, delimiter)
       );
-      separator = "";
     }
-  }
+  });
   return result.join("\n");
 };
 
