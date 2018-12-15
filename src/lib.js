@@ -69,23 +69,21 @@ const headOutput = function(readFile, args, existsFile) {
     return invalidRangeMessage(type, range, "head");
   }
   range = Math.abs(range);
-  for (let index = 0; index < files.length; index++) {
-    if (!existsFile(files[index], "utf-8")) {
-      result.push(invalidFilesMessage(files[index], "head"));
-      continue;
+  result = files.map(function(file) {
+    if (!existsFile(file, "utf-8")) {
+      return invalidFilesMessage(file, "head");
     }
     if (files.length == 1) {
-      return headContents(readFile(files[0], "utf-8"), range, delimiter);
+      return (headContents(readFile(file, "utf-8"), range, delimiter));
     }
     if (files.length > 1) {
-      result.push(
-        headerText(files[index]) +
+      return (
+        headerText(file) +
           "\n" +
-          headContents(readFile(files[index], "utf-8"), range, delimiter)
+          headContents(readFile(file, "utf-8"), range, delimiter)
       );
-      separator = "";
     }
-  }
+  });
   return result.join("\n");
 };
 
