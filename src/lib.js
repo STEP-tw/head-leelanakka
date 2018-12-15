@@ -13,12 +13,13 @@ const headContents = function(string, noOfLines, delimiter) {
 
 const tailContents = function(string, noOfLines, delimiter) {
   let content = string.split(delimiter).reverse();
-  if (content[0] == ""){
+  if (content[0] == "") {
     content = content.slice(1);
   }
-  content = content.slice(0,noOfLines).reverse();
+  content = content.slice(0, noOfLines).reverse();
   return content.join(delimiter);
 };
+
 const extractNumber = function(args, type) {
   return +args[0] || args[0].slice(2) || args[args.indexOf("-" + type) + 1];
 };
@@ -55,60 +56,46 @@ const isInvalidRange = function(files, range) {
 };
 
 const invalidRangeMessage = function(type, range, functionName) {
-  let message = { c: "byte count", n: "line count", tail: "offset" };
-  return functionName + ": illegal " + message[type] + " -- " + range;
+  let message = {
+    head: { c: "byte count", n: "line count" },
+    tail: { c: "offset", n: "offset" }
+  };
+  return (
+    functionName + ": illegal " + message[functionName][type] + " -- " + range
+  );
 };
 
 const invalidFilesMessage = function(fileName, functionName) {
   return functionName + ": " + fileName + ": No such file or directory";
 };
-const headOutput = function(readFile, args, existsFile) {
+
+const getOutputContent = function(readFile, args, existsFile, option) {
   let { files, range, type, delimiter } = parseInputs(args);
   let result = [];
-  if (isInvalidRange(files, range)) {
-    return invalidRangeMessage(type, range, "head");
+  let contents = { head: headContents, tail: tailContents };
+  if (option == "tail" && range == 0) {
+    return "";
   }
+
+  if (isNaN(range)) {
+    return invalidRangeMessage(type, range, option);
+  }
+
   range = Math.abs(range);
   result = files.map(function(file) {
     if (!existsFile(file, "utf-8")) {
-      return invalidFilesMessage(file, "head");
+      return invalidFilesMessage(file, option);
     }
+
     if (files.length == 1) {
-      return (headContents(readFile(file, "utf-8"), range, delimiter));
+      return contents[option](readFile(file, "utf-8"), range, delimiter);
     }
+
     if (files.length > 1) {
       return (
         headerText(file) +
-          "\n" +
-          headContents(readFile(file, "utf-8"), range, delimiter)
-      );
-    }
-  });
-  return result.join("\n");
-};
-
-const tailOutput = function(readFile, args, existsFile) {
-  let { files, range, delimiter } = parseInputs(args);
-  let result = [];
-  if (range == 0) {
-    return "";
-  }
-  if (isNaN(range)) {
-    return invalidRangeMessage("tail", range, "tail");
-  }
-  range = Math.abs(range);
-  result = files.map(function(file){
-    if (!existsFile(file, "utf8")) {
-      return (invalidFilesMessage(file, "tail"));
-    }
-    if (files.length == 1) {
-      return tailContents(readFile(file, "utf8"), range, delimiter);
-    }
-    if (files.length > 1) {
-      return(
-        headerText(file) +
-          "\n" +
-          tailContents(readFile(file, "utf8"), range, delimiter)
+        "\n" +
+        contents[option](readFile(file, "utf-8"), range, delimiter)
       );
     }
   });
@@ -119,12 +106,11 @@ module.exports = {
   headContents,
   parseInputs,
   headerText,
-  headOutput,
+  getOutputContent,
   headerText,
   take,
   extractNumber,
   invalidRangeMessage,
   invalidFilesMessage,
-  tailContents,
-  tailOutput
+  tailContents
 };

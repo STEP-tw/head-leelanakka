@@ -4,13 +4,12 @@ const {
   headContents,
   parseInputs,
   headerText,
-  headOutput,
+  getOutputContent,
   take,
   extractNumber,
   invalidRangeMessage,
   invalidFilesMessage,
-  tailContents,
-  tailOutput
+  tailContents
 } = require("../src/lib.js");
 
 const reader = file => file;
@@ -18,81 +17,112 @@ const reader = file => file;
 const existsFile = x => true;
 const notExistsFile = x => false;
 
-describe("headOutput", () => {
+describe("getOutputContent", () => {
   it("should return the file content by bite wise count for input arguement as -c", () => {
-    deepEqual(headOutput(reader, ["-c2", "file1"], existsFile), "fi");
+    deepEqual(
+      getOutputContent(reader, ["-c2", "file1"], existsFile, "head"),
+      "fi"
+    );
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
-      headOutput(reader, ["-c", "file1"], existsFile),
+      getOutputContent(reader, ["-c", "file1"], existsFile, "head"),
       "head: illegal byte count -- file1"
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(headOutput(reader, ["-n2", "file1"], existsFile), "file1");
+    deepEqual(
+      getOutputContent(reader, ["-n2", "file1"], existsFile, "head"),
+      "file1"
+    );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      headOutput(reader, ["-n2", "file1"], notExistsFile),
+      getOutputContent(reader, ["-n2", "file1"], notExistsFile, "head"),
       "head: file1: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
-      headOutput(reader, ["-c2", "file1", "file2"], existsFile),
+      getOutputContent(reader, ["-c2", "file1", "file2"], existsFile, "head"),
       "==> file1 <==\nfi\n==> file2 <==\nfi"
     );
     deepEqual(
-      headOutput(reader, ["-n2", "file1", "file2"], existsFile),
+      getOutputContent(reader, ["-n2", "file1", "file2"], existsFile, "head"),
       "==> file1 <==\nfile1\n==> file2 <==\nfile2"
     );
     deepEqual(
-      headOutput(reader, ["-n2", "file1", "file2"], notExistsFile),
-      'head: file1: No such file or directory\nhead: file2: No such file or directory'
+      getOutputContent(
+        reader,
+        ["-n2", "file1", "file2"],
+        notExistsFile,
+        "head"
+      ),
+      "head: file1: No such file or directory\nhead: file2: No such file or directory"
     );
   });
 });
 
-describe('tailOutput',() => {
-  it('should return the file content by bit wise for input arguement as -c',() => {
-    deepEqual(tailOutput(reader, ["-c2", "file1"], existsFile), "e1");
+describe("getOutputContent", () => {
+  it("should return the file content by bit wise for input arguement as -c", () => {
+    deepEqual(
+      getOutputContent(reader, ["-c2", "file1"], existsFile, "tail"),
+      "e1"
+    );
   });
-  it('should return empty string for 0 as the input',() => {
-    deepEqual(tailOutput(reader,["-c0","file1"],existsFile),"");
+  it("should return empty string for 0 as the input", () => {
+    deepEqual(
+      getOutputContent(reader, ["-c0", "file1"], existsFile, "tail"),
+      ""
+    );
   });
-  it('should return empty string for 0 as the input',() => {
-    deepEqual(tailOutput(reader,["-c1","file1"],existsFile),"1");
+  it("should return empty string for 0 as the input", () => {
+    deepEqual(
+      getOutputContent(reader, ["-c1", "file1"], existsFile, "tail"),
+      "1"
+    );
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
-      tailOutput(reader, ["-c", "file1"], existsFile),
+      getOutputContent(reader, ["-c", "file1"], existsFile, "tail"),
       "tail: illegal offset -- file1"
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(tailOutput(reader, ["-n2", "file1"], existsFile), "file1");
-  });
-  it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(tailOutput(reader, ["-n2", "file1\n"], existsFile), "file1");
+    deepEqual(
+      getOutputContent(reader, ["-n2", "file1"], existsFile, "tail"),
+      "file1"
+    );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      tailOutput(reader, ["-n2", "file1"], notExistsFile),
+      getOutputContent(reader, ["-n2", "file1\n"], existsFile, "tail"),
+      "file1"
+    );
+  });
+  it("should return the file content by line wise count for input arguement as -n", () => {
+    deepEqual(
+      getOutputContent(reader, ["-n2", "file1"], notExistsFile, "tail"),
       "tail: file1: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
-      tailOutput(reader, ["-c2", "file1", "file2"], existsFile),
+      getOutputContent(reader, ["-c2", "file1", "file2"], existsFile, "tail"),
       "==> file1 <==\ne1\n==> file2 <==\ne2"
     );
     deepEqual(
-      tailOutput(reader, ["-n2", "file1", "file2"], existsFile),
+      getOutputContent(reader, ["-n2", "file1", "file2"], existsFile, "tail"),
       "==> file1 <==\nfile1\n==> file2 <==\nfile2"
     );
     deepEqual(
-      tailOutput(reader, ["-n2", "file1", "file2"], notExistsFile),
-      'tail: file1: No such file or directory\ntail: file2: No such file or directory'
+      getOutputContent(
+        reader,
+        ["-n2", "file1", "file2"],
+        notExistsFile,
+        "tail"
+      ),
+      "tail: file1: No such file or directory\ntail: file2: No such file or directory"
     );
   });
 });
@@ -123,19 +153,26 @@ describe("headContents", () => {
   });
 });
 
-describe('tailContents',() => {
-  it('should return the last character of the file',() => {
-    equal(tailContents('leela',1,''),"a");
-    equal(tailContents('leela\nprasanth',1,'\n'),"prasanth");
+describe("tailContents", () => {
+  it("should return the last character of the file", () => {
+    equal(tailContents("leela", 1, ""), "a");
+    equal(tailContents("leela\nprasanth", 1, "\n"), "prasanth");
   });
-  it('should return the content based on the delimiter',() => {
-    let input = "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
-    equal(tailContents(input,2,''),"ws");
-    equal(tailContents(input,9,''),"e windows");
-    equal(tailContents(input,1,'\n'),"He forbade affixed parties of assured to me windows");
-    equal(tailContents(input,2,'\n'),"Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows");
+  it("should return the content based on the delimiter", () => {
+    let input =
+      "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
+    equal(tailContents(input, 2, ""), "ws");
+    equal(tailContents(input, 9, ""), "e windows");
+    equal(
+      tailContents(input, 1, "\n"),
+      "He forbade affixed parties of assured to me windows"
+    );
+    equal(
+      tailContents(input, 2, "\n"),
+      "Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows"
+    );
   });
-  it('should tail the contents based on the number and delimiter',() => {
+  it("should tail the contents based on the number and delimiter", () => {
     equal(tailContents("h\ne\na\nd", 2, "\n"), "a\nd");
     equal(tailContents("h\ne\na\nd", 2, ""), "\nd");
   });
@@ -312,52 +349,67 @@ describe("headerText", () => {
   });
 });
 
-describe('headerText',() => {
-  it('should return the header text with the file name',() => {
-    equal(headerText("file"),"==> file <==");
+describe("headerText", () => {
+  it("should return the header text with the file name", () => {
+    equal(headerText("file"), "==> file <==");
   });
-  it('should return the header text with empty if user gives no file name',() => {
-    equal(headerText(""),"==>  <==");
-  });
-});
-
-describe('take',() => {
-  it('should slice the array from 0 to given upper limit',() => {
-    deepEqual(take([1,2,3],2),[1,2]);
-    deepEqual(take([1,2,3],1),[1]);
-  });
-  it('should return the empty array if we give 0 as upper limit',() => {
-    deepEqual(take([1,2,3],0),[]);
+  it("should return the header text with empty if user gives no file name", () => {
+    equal(headerText(""), "==>  <==");
   });
 });
 
-describe('extractNumber',() => {
-  it('should return only number in an array of elements',() => {
-    deepEqual(extractNumber([2,"file"],""),2);
-    deepEqual(extractNumber([-2,"file"],""),-2);
-    deepEqual(extractNumber(["-c2","file"],"n"),2);
-    deepEqual(extractNumber(["-r2","file"],"n"),2);
+describe("take", () => {
+  it("should slice the array from 0 to given upper limit", () => {
+    deepEqual(take([1, 2, 3], 2), [1, 2]);
+    deepEqual(take([1, 2, 3], 1), [1]);
   });
-})
-
-describe('invalidRangeMessage',() => {
-  it('should return the illegal line count for input of type n',() => {
-    equal(invalidRangeMessage("n","",'head'),"head: illegal line count -- ");
-    equal(invalidRangeMessage("n","-10X",'tail'),"tail: illegal line count -- -10X");
-  });
-  it('should return the illegal byte count for input of type c',() => {
-    equal(invalidRangeMessage("c","",'head'),"head: illegal byte count -- ");
-    equal(invalidRangeMessage("c","-10X",'tail'),"tail: illegal byte count -- -10X");
-  });
-  it('should return the illegal offset count for input as tail',() => {
-    equal(invalidRangeMessage("tail","",'tail'),"tail: illegal offset -- ");
-    equal(invalidRangeMessage("tail","-10X",'tail'),"tail: illegal offset -- -10X");
+  it("should return the empty array if we give 0 as upper limit", () => {
+    deepEqual(take([1, 2, 3], 0), []);
   });
 });
 
-describe('invalidFilesMessage',() => {
-  it('should return the error message with the given file name',() => {
-    equal(invalidFilesMessage("file",'head'),"head: file: No such file or directory");
-    equal(invalidFilesMessage("leela",'tail'),"tail: leela: No such file or directory");
+describe("extractNumber", () => {
+  it("should return only number in an array of elements", () => {
+    deepEqual(extractNumber([2, "file"], ""), 2);
+    deepEqual(extractNumber([-2, "file"], ""), -2);
+    deepEqual(extractNumber(["-c2", "file"], "n"), 2);
+    deepEqual(extractNumber(["-r2", "file"], "n"), 2);
   });
-})
+});
+
+describe("invalidRangeMessage", () => {
+  it("should return the illegal line count for input of type n", () => {
+    equal(invalidRangeMessage("n", "", "head"), "head: illegal line count -- ");
+    equal(
+      invalidRangeMessage("n", "-10X", "tail"),
+      "tail: illegal offset -- -10X"
+    );
+  });
+  it("should return the illegal byte count for input of type c", () => {
+    equal(invalidRangeMessage("c", "", "head"), "head: illegal byte count -- ");
+    equal(
+      invalidRangeMessage("c", "-10X", "tail"),
+      "tail: illegal offset -- -10X"
+    );
+  });
+  it("should return the illegal offset count for input as tail", () => {
+    equal(invalidRangeMessage("c", "", "tail"), "tail: illegal offset -- ");
+    equal(
+      invalidRangeMessage("n", "-10X", "tail"),
+      "tail: illegal offset -- -10X"
+    );
+  });
+});
+
+describe("invalidFilesMessage", () => {
+  it("should return the error message with the given file name", () => {
+    equal(
+      invalidFilesMessage("file", "head"),
+      "head: file: No such file or directory"
+    );
+    equal(
+      invalidFilesMessage("leela", "tail"),
+      "tail: leela: No such file or directory"
+    );
+  });
+});
