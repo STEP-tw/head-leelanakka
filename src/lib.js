@@ -51,10 +51,6 @@ const parseInputs = function(args) {
   return { type, range, files, delimiter };
 };
 
-const isInvalidRange = function(files, range) {
-  return range == 0 || files.length == 0 || "" + +range == "NaN";
-};
-
 const invalidRangeMessage = function(type, range, functionName) {
   let message = {
     head: { c: "byte count", n: "line count" },
