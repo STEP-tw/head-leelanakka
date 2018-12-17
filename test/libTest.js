@@ -15,6 +15,7 @@ const {
 const reader = file => file;
 
 const existsFile = x => true;
+
 const notExistsFile = x => false;
 
 describe("getOutputContent", () => {
