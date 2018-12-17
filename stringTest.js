@@ -1,10 +1,10 @@
-const {
-  headerText,
-  headContents,
-  take,
-  tailContents
-} = require("../src/util.js");
 const { equal, deepEqual } = require("assert");
+
+const {
+  headContents,
+  tailContents,
+  headerText
+} = require("../src/util/string.js");
 
 describe("headContents", () => {
   it("it should return nothing when we give 0 as input ", () => {
@@ -65,23 +65,10 @@ describe("headerText", () => {
   it("should reaturn the header text with the input file name", () => {
     equal(headerText("head.js"), "==> " + "head.js" + " <==");
   });
-});
-
-describe("headerText", () => {
   it("should return the header text with the file name", () => {
     equal(headerText("file"), "==> file <==");
   });
   it("should return the header text with empty if user gives no file name", () => {
     equal(headerText(""), "==>  <==");
-  });
-});
-
-describe("take", () => {
-  it("should slice the array from 0 to given upper limit", () => {
-    deepEqual(take([1, 2, 3], 2), [1, 2]);
-    deepEqual(take([1, 2, 3], 1), [1]);
-  });
-  it("should return the empty array if we give 0 as upper limit", () => {
-    deepEqual(take([1, 2, 3], 0), []);
   });
 });

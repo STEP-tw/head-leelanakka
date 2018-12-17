@@ -7,30 +7,29 @@ const extractFiles = function(args, type) {
 };
 
 const parseInputs = function(args) {
-  let type = "n";
-  let range = extractNumber(args, type);
+  let option = "n";
+  let range = extractNumber(args, option);
   let files = [];
   let delimiter = "\n";
 
   if (!+args[0] && args[0][0] != "-") {
     files = files.concat(args);
     range = 10;
-    return { type, range, files, delimiter };
+    return { option, range, files, delimiter };
   }
 
   if (args[0].slice(0, 2) == "-c") {
-    type = "c";
+    option = "c";
     delimiter = "";
-    range = extractNumber(args, type);
-    files = extractFiles(args, type);
-    return { type, range, files, delimiter };
+    range = extractNumber(args, option);
+    files = extractFiles(args, option);
+    return { option, range, files, delimiter };
   }
-  files = extractFiles(args, type);
-  return { type, range, files, delimiter };
+  files = extractFiles(args, option);
+  return { option, range, files, delimiter };
 };
-
 module.exports = {
   parseInputs,
-  extractNumber,
   extractFiles,
+  extractNumber
 };

@@ -14,13 +14,13 @@ describe("extractNumber", () => {
 describe("parseInputs", () => {
   it("should return the default parsed inputs as per the given input", () => {
     deepEqual(parseInputs(["-c", 10, "file1"]), {
-      type: "c",
+      option: "c",
       range: 10,
       files: ["file1"],
       delimiter: ""
     });
     deepEqual(parseInputs(["-n", 10, "file1"]), {
-      type: "n",
+      option: "n",
       range: 10,
       files: ["file1"],
       delimiter: "\n"
@@ -29,7 +29,7 @@ describe("parseInputs", () => {
 
   it("should return the parsed inputs as per the given input", () => {
     deepEqual(parseInputs(["-n", 1, "file1"]), {
-      type: "n",
+      option: "n",
       range: 1,
       files: ["file1"],
       delimiter: "\n"
@@ -38,85 +38,85 @@ describe("parseInputs", () => {
 
   it("should return the range as 0 is user give 0 as range", () => {
     deepEqual(parseInputs(["-n", 0, "file1"]), {
-      type: "n",
+      option: "n",
       range: 0,
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-c", 0, "file1"]), {
-      type: "c",
+      option: "c",
       range: 0,
       files: ["file1"],
       delimiter: ""
     });
   });
 
-  it("should return the type key value as n for no input of type", () => {
+  it("should return the option key value as n for no input of option", () => {
     deepEqual(parseInputs(["10", "file1"]), {
-      type: "n",
+      option: "n",
       range: 10,
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["7", "file1"]), {
-      type: "n",
+      option: "n",
       range: 7,
       files: ["file1"],
       delimiter: "\n"
     });
   });
 
-  it("should return the type key value as n for -number input also", () => {
+  it("should return the option key value as n for -number input also", () => {
     deepEqual(parseInputs(["-10", "file1"]), {
-      type: "n",
+      option: "n",
       range: -10,
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-9", "file1"]), {
-      type: "n",
+      option: "n",
       range: -9,
       files: ["file1"],
       delimiter: "\n"
     });
   });
 
-  it("should return the type and range correctly even we pass combined type and range", () => {
+  it("should return the option and range correctly even we pass combined option and range", () => {
     deepEqual(parseInputs(["-c2", "file1"]), {
-      type: "c",
+      option: "c",
       range: 2,
       files: ["file1"],
       delimiter: ""
     });
     deepEqual(parseInputs(["-n9", "file1"]), {
-      type: "n",
+      option: "n",
       range: 9,
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-n0", "file1"]), {
-      type: "n",
+      option: "n",
       range: 0,
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-c0", "file1"]), {
-      type: "c",
+      option: "c",
       range: 0,
       files: ["file1"],
       delimiter: ""
     });
   });
 
-  it("should return the range 10 and type as n if we dont give any range and type", () => {
+  it("should return the range 10 and option as n if we dont give any range and option", () => {
     deepEqual(parseInputs(["files1"]), {
-      type: "n",
+      option: "n",
       range: 10,
       files: ["files1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["files1", "files2", "files3"]), {
-      type: "n",
+      option: "n",
       range: 10,
       files: ["files1", "files2", "files3"],
       delimiter: "\n"
@@ -125,46 +125,46 @@ describe("parseInputs", () => {
 
   it("should return the range as same the user for wrong input and file names", () => {
     deepEqual(parseInputs(["-n", "0X", "file1"]), {
-      type: "n",
+      option: "n",
       range: "0X",
       files: ["file1"],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-c", "0X", "file1"]), {
-      type: "c",
+      option: "c",
       range: "0X",
       files: ["file1"],
       delimiter: ""
     });
     deepEqual(parseInputs(["-c10X", "file1"]), {
-      type: "c",
+      option: "c",
       range: "10X",
       files: ["file1"],
       delimiter: ""
     });
     deepEqual(parseInputs(["-n10X", "file1"]), {
-      type: "n",
+      option: "n",
       range: "10X",
       files: ["file1"],
       delimiter: "\n"
     });
   });
 
-  it("should return the range as the file name if the user gives type and doesnt give any number", () => {
+  it("should return the range as the file name if the user gives option and doesnt give any number", () => {
     deepEqual(parseInputs(["-n", "file1"]), {
-      type: "n",
+      option: "n",
       range: "file1",
       files: [],
       delimiter: "\n"
     });
     deepEqual(parseInputs(["-c", "file1"]), {
-      type: "c",
+      option: "c",
       range: "file1",
       files: [],
       delimiter: ""
     });
     deepEqual(parseInputs(["files1", "files2", "files3"]), {
-      type: "n",
+      option: "n",
       range: 10,
       files: ["files1", "files2", "files3"],
       delimiter: "\n"
