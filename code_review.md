@@ -1,10 +1,11 @@
-Utility function that are not in Utility
-In parse input function option is better instead of type
-function name is poor line no 9 and line no 14
-Order of args in `head.js` and `tail.js`;
-In main function fs object is better to pass
-GetOutputContent function is so long
-IN 'libTest.js'line 15 this function is misleading
-misleading test in line no 34
-unecessary usage of variable
-change parameter name of `noOfLines` in 9&14 lines;
+### codeSmell 
+1. Utility function that are not  in Utility 
+2. In parse input function ```option``` is better instead of `type`
+3. function name is `poor` in line no 9 and line no 14
+4. Order of args in `head.js` and `tail.js`;
+5. In main function `fs` object is better to pass 
+6. `GetOutputContent` function is too long 
+7. IN  `line 15` in `libTest.js` the function is misleading
+8. misleading test in line no 34
+9. unecessary usage of variable
+10. change parameter name of `noOfLines` in 9&14 lines;
