@@ -34,17 +34,14 @@ const contentMapper = function(args, fs, utility) {
 
 const getContent = function(args, fs, utility) {
   let { range, option } = parseInputs(args);
-  let result = [];
   if (utility == "tail" && range == 0) {
     return "";
   }
-
-  if (isNaN(range) || range == 0) {
+  if (!(+range > 0)) {
     return invalidRangeMessage(option, range, utility);
   }
 
-  result = contentMapper(args, fs, utility);
-  return result.join("\n");
+  return contentMapper(args, fs, utility).join("\n");
 };
 
 module.exports = {
