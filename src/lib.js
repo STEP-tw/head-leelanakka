@@ -16,18 +16,16 @@ const contentMapper = function(args, fs, utility) {
     if (!existsSync(file, "utf-8")) {
       return invalidFilesMessage(file, utility);
     }
+    let output = contents[utility](
+      readFileSync(file, "utf-8"),
+      range,
+      delimiter
+    );
 
     if (files.length == 1) {
-      return contents[utility](readFileSync(file, "utf-8"), range, delimiter);
+      return output;
     }
-
-    if (files.length > 1) {
-      return (
-        headerText(file) +
-        "\n" +
-        contents[utility](readFileSync(file, "utf-8"), range, delimiter)
-      );
-    }
+    return headerText(file) + "\n" + output;
   });
   return result;
 };
