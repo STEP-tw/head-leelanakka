@@ -3,17 +3,17 @@ const extractNumber = function(args, type) {
 };
 
 const extractFiles = function(args, type) {
-  return [].concat(args.slice(args.indexOf("-" + type) + 2));
+  return args.slice(args.indexOf("-" + type) + 2);
 };
 
 const parseInputs = function(args) {
   let option = "n";
   let range = extractNumber(args, option);
-  let files = [];
+  let files;
   let delimiter = "\n";
 
   if (!+args[0] && args[0][0] != "-") {
-    files = files.concat(args);
+    files = args;
     range = 10;
     return { option, range, files, delimiter };
   }
@@ -28,6 +28,7 @@ const parseInputs = function(args) {
   files = extractFiles(args, option);
   return { option, range, files, delimiter };
 };
+  
 module.exports = {
   parseInputs,
   extractFiles,

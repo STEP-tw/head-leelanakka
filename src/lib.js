@@ -20,10 +20,34 @@ const invalidFilesMessage = function(fileName, functionName) {
   return functionName + ": " + fileName + ": No such file or directory";
 };
 
-const getOutputContent = function(readFile, args, existsFile, command) {
-  let { files, range, option, delimiter } = parseInputs(args);
-  let result = [];
+const contentMapper = function(args, fs, command) {
+  const { readFileSync, existsSync } = fs;
   let contents = { head: headContents, tail: tailContents };
+  let { files, range, delimiter } = parseInputs(args);
+  let result = [];
+  result = files.map(function(file) {
+    if (!existsSync(file, "utf-8")) {
+      return invalidFilesMessage(file, command);
+    }
+
+    if (files.length == 1) {
+      return contents[command](readFileSync(file, "utf-8"), range, delimiter);
+    }
+
+    if (files.length > 1) {
+      return (
+        headerText(file) +
+        "\n" +
+        contents[command](readFileSync(file, "utf-8"), range, delimiter)
+      );
+    }
+  });
+  return result;
+};
+
+const getContent = function(args, fs, command) {
+  let { range, option } = parseInputs(args);
+  let result = [];
   if (command == "tail" && range == 0) {
     return "";
   }
@@ -33,28 +57,12 @@ const getOutputContent = function(readFile, args, existsFile, command) {
   }
 
   range = Math.abs(range);
-  result = files.map(function(file) {
-    if (!existsFile(file, "utf-8")) {
-      return invalidFilesMessage(file, command);
-    }
-
-    if (files.length == 1) {
-      return contents[command](readFile(file, "utf-8"), range, delimiter);
-    }
-
-    if (files.length > 1) {
-      return (
-        headerText(file) +
-        "\n" +
-        contents[command](readFile(file, "utf-8"), range, delimiter)
-      );
-    }
-  });
+  result = contentMapper(args, fs, command);
   return result.join("\n");
 };
 
 module.exports = {
-  getOutputContent,
+  getContent,
   invalidRangeMessage,
   invalidFilesMessage
 };

@@ -1,4 +1,5 @@
 const { take } = require("../../src/util/array.js");
+
 const headContents = function(string, numberOfLines, delimiter) {
   let content = string.split(delimiter);
   return take(content, numberOfLines).join(delimiter);

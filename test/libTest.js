@@ -1,56 +1,53 @@
 const { equal, deepEqual } = require("assert");
 
 const {
-  getOutputContent,
+  getContent,
   invalidRangeMessage,
   invalidFilesMessage
 } = require("../src/lib.js");
 
-const reader = file => file;
+const readFileSync = file => file;
+const existsSync = x => true;
+const notExistsSync = x => false;
 
-const existsFile = x => true;
+const fs = { readFileSync, existsSync };
 
-const notExistsFile = x => false;
-
-describe("getOutputContent", () => {
+describe("getContent", () => {
   it("should return the file content by bite wise count for input arguement as -c", () => {
-    deepEqual(
-      getOutputContent(reader, ["-c2", "file1"], existsFile, "head"),
-      "fi"
-    );
+    deepEqual(getContent(["-c2", "file1"], fs, "head"), "fi");
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
-      getOutputContent(reader, ["-c", "file1"], existsFile, "head"),
+      getContent(["-c", "file1"], fs, "head"),
       "head: illegal byte count -- file1"
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(
-      getOutputContent(reader, ["-n2", "file1"], existsFile, "head"),
-      "file1"
-    );
+    deepEqual(getContent(["-n2", "file1"], fs, "head"), "file1");
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      getOutputContent(reader, ["-n2", "file1"], notExistsFile, "head"),
+      getContent(
+        ["-n2", "file1"],
+        { readFileSync: readFileSync, existsSync: notExistsSync },
+        "head"
+      ),
       "head: file1: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
-      getOutputContent(reader, ["-c2", "file1", "file2"], existsFile, "head"),
+      getContent(["-c2", "file1", "file2"], fs, "head"),
       "==> file1 <==\nfi\n==> file2 <==\nfi"
     );
     deepEqual(
-      getOutputContent(reader, ["-n2", "file1", "file2"], existsFile, "head"),
+      getContent(["-n2", "file1", "file2"], fs, "head"),
       "==> file1 <==\nfile1\n==> file2 <==\nfile2"
     );
     deepEqual(
-      getOutputContent(
-        reader,
+      getContent(
         ["-n2", "file1", "file2"],
-        notExistsFile,
+        { readFileSync: readFileSync, existsSync: notExistsSync },
         "head"
       ),
       "head: file1: No such file or directory\nhead: file2: No such file or directory"
@@ -58,73 +55,61 @@ describe("getOutputContent", () => {
   });
 });
 
-describe("getOutputContent", () => {
+describe("getContent", () => {
   it("should return the file content by bit wise for input arguement as -c", () => {
-    deepEqual(
-      getOutputContent(reader, ["-c2", "file1"], existsFile, "tail"),
-      "e1"
-    );
+    deepEqual(getContent(["-c2", "file1"], fs, "tail"), "e1");
   });
   it("should return empty string for 0 as the input", () => {
-    deepEqual(
-      getOutputContent(reader, ["-c0", "file1"], existsFile, "tail"),
-      ""
-    );
+    deepEqual(getContent(["-c0", "file1"], fs, "tail"), "");
   });
   it("should return illegal type count for 0 and head as input", () => {
     deepEqual(
-      getOutputContent(reader, ["-n0", "file1"], existsFile, "head"),
+      getContent(["-n0", "file1"], fs, "head"),
       "head: illegal line count -- 0"
     );
     deepEqual(
-      getOutputContent(reader, ["-c0", "file1"], existsFile, "head"),
+      getContent(["-c0", "file1"], fs, "head"),
       "head: illegal byte count -- 0"
     );
   });
   it("should return empty string for 0 as the input", () => {
-    deepEqual(
-      getOutputContent(reader, ["-c1", "file1"], existsFile, "tail"),
-      "1"
-    );
+    deepEqual(getContent(["-c1", "file1"], fs, "tail"), "1");
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
-      getOutputContent(reader, ["-c", "file1"], existsFile, "tail"),
+      getContent(["-c", "file1"], fs, "tail"),
       "tail: illegal offset -- file1"
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(
-      getOutputContent(reader, ["-n2", "file1"], existsFile, "tail"),
-      "file1"
-    );
+    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "file1");
+  });
+  it("should return the file content by line wise count for input arguement as -n", () => {
+    deepEqual(getContent(["-n2", "file1\n"], fs, "tail"), "file1");
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      getOutputContent(reader, ["-n2", "file1\n"], existsFile, "tail"),
-      "file1"
-    );
-  });
-  it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(
-      getOutputContent(reader, ["-n2", "file1"], notExistsFile, "tail"),
+      getContent(
+        ["-n2", "file1"],
+        { readFileSync: readFileSync, existsSync: notExistsSync },
+        "tail"
+      ),
       "tail: file1: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
-      getOutputContent(reader, ["-c2", "file1", "file2"], existsFile, "tail"),
+      getContent(["-c2", "file1", "file2"], fs, "tail"),
       "==> file1 <==\ne1\n==> file2 <==\ne2"
     );
     deepEqual(
-      getOutputContent(reader, ["-n2", "file1", "file2"], existsFile, "tail"),
+      getContent(["-n2", "file1", "file2"], fs, "tail"),
       "==> file1 <==\nfile1\n==> file2 <==\nfile2"
     );
     deepEqual(
-      getOutputContent(
-        reader,
+      getContent(
         ["-n2", "file1", "file2"],
-        notExistsFile,
+        { readFileSync: readFileSync, existsSync: notExistsSync },
         "tail"
       ),
       "tail: file1: No such file or directory\ntail: file2: No such file or directory"
