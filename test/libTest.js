@@ -3,9 +3,10 @@ const { deepEqual } = require("assert");
 const { getContent, contentMapper } = require("../src/lib.js");
 
 const contents = {
-  file1:"My telephone receiver slams down on its cradle",
-  file2:"She obviously spends every non-working hour in thorough personal exploration of all things culinary"
-}
+  file1: "My telephone receiver slams down on its cradle",
+  file2:
+    "She obviously spends every non-working hour in thorough personal exploration of all things culinary"
+};
 
 const readFileSync = file => contents[file];
 const existsSync = x => Object.keys(contents).includes(x);
@@ -22,15 +23,14 @@ describe("getContent", () => {
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1"], fs, "head"), "My telephone receiver slams down on its cradle");
+    deepEqual(
+      getContent(["-n2", "file1"], fs, "head"),
+      "My telephone receiver slams down on its cradle"
+    );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      getContent(
-        ["-n2", "file"],
-        fs,
-        "head"
-      ),
+      getContent(["-n2", "file"], fs, "head"),
       "head: file: No such file or directory"
     );
   });
@@ -44,11 +44,7 @@ describe("getContent", () => {
       "==> file1 <==\nMy telephone receiver slams down on its cradle\n==> file2 <==\nShe obviously spends every non-working hour in thorough personal exploration of all things culinary"
     );
     deepEqual(
-      getContent(
-        ["-n2", "head.js", "tail.js"],
-        fs,
-        "head"
-      ),
+      getContent(["-n2", "head.js", "tail.js"], fs, "head"),
       "head: head.js: No such file or directory\nhead: tail.js: No such file or directory"
     );
   });
@@ -78,18 +74,20 @@ describe("getContent", () => {
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "My telephone receiver slams down on its cradle");
-  });
-  it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "My telephone receiver slams down on its cradle");
+    deepEqual(
+      getContent(["-n2", "file1"], fs, "tail"),
+      "My telephone receiver slams down on its cradle"
+    );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
-      getContent(
-        ["-n2", "leela.js"],
-        fs,
-        "tail"
-      ),
+      getContent(["-n2", "file1"], fs, "tail"),
+      "My telephone receiver slams down on its cradle"
+    );
+  });
+  it("should return the file content by line wise count for input arguement as -n", () => {
+    deepEqual(
+      getContent(["-n2", "leela.js"], fs, "tail"),
       "tail: leela.js: No such file or directory"
     );
   });
@@ -103,20 +101,16 @@ describe("getContent", () => {
       "==> file1 <==\nMy telephone receiver slams down on its cradle\n==> file2 <==\nShe obviously spends every non-working hour in thorough personal exploration of all things culinary"
     );
     deepEqual(
-      getContent(
-        ["-n2", "mobile.js", "iphone"],
-        fs,
-        "tail"
-      ),
+      getContent(["-n2", "mobile.js", "iphone"], fs, "tail"),
       "tail: mobile.js: No such file or directory\ntail: iphone: No such file or directory"
     );
   });
 });
 
-
-describe('contentMapper',() => {
-  it('should map the contents of the files and resturn as per the input in array',() => {
-    deepEqual(contentMapper(["-n2", "file1"],fs,"head"),["My telephone receiver slams down on its cradle"])
+describe("contentMapper", () => {
+  it("should map the contents of the files and resturn as per the input in array", () => {
+    deepEqual(contentMapper(["-n2", "file1"], fs, "head"), [
+      "My telephone receiver slams down on its cradle"
+    ]);
   });
-
 });
