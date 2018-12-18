@@ -43,11 +43,11 @@ const getContent = function(args, fs, utility) {
     return invalidRangeMessage(option, range, utility);
   }
 
-  range = Math.abs(range);
   result = contentMapper(args, fs, utility);
   return result.join("\n");
 };
 
 module.exports = {
-  getContent
+  getContent,
+  contentMapper
 };

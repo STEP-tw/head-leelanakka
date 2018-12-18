@@ -1,16 +1,19 @@
 const { deepEqual } = require("assert");
 
-const { getContent } = require("../src/lib.js");
+const { getContent, contentMapper } = require("../src/lib.js");
 
-const readFileSync = file => file;
-const existsSync = x => true;
-const notExistsSync = x => false;
+const contents = {
+  file1:"My telephone receiver slams down on its cradle",
+  file2:"She obviously spends every non-working hour in thorough personal exploration of all things culinary"
+}
 
+const readFileSync = file => contents[file];
+const existsSync = x => Object.keys(contents).includes(x);
 const fs = { readFileSync, existsSync };
 
 describe("getContent", () => {
   it("should return the file content by bite wise count for input arguement as -c", () => {
-    deepEqual(getContent(["-c2", "file1"], fs, "head"), "fi");
+    deepEqual(getContent(["-c2", "file1"], fs, "head"), "My");
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
@@ -19,41 +22,38 @@ describe("getContent", () => {
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1"], fs, "head"), "file1");
+    deepEqual(getContent(["-n2", "file1"], fs, "head"), "My telephone receiver slams down on its cradle");
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
       getContent(
-        ["-n2", "file1"],
-        { readFileSync: readFileSync, existsSync: notExistsSync },
+        ["-n2", "file"],
+        fs,
         "head"
       ),
-      "head: file1: No such file or directory"
+      "head: file: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
       getContent(["-c2", "file1", "file2"], fs, "head"),
-      "==> file1 <==\nfi\n==> file2 <==\nfi"
+      "==> file1 <==\nMy\n==> file2 <==\nSh"
     );
     deepEqual(
       getContent(["-n2", "file1", "file2"], fs, "head"),
-      "==> file1 <==\nfile1\n==> file2 <==\nfile2"
+      "==> file1 <==\nMy telephone receiver slams down on its cradle\n==> file2 <==\nShe obviously spends every non-working hour in thorough personal exploration of all things culinary"
     );
     deepEqual(
       getContent(
-        ["-n2", "file1", "file2"],
-        { readFileSync: readFileSync, existsSync: notExistsSync },
+        ["-n2", "head.js", "tail.js"],
+        fs,
         "head"
       ),
-      "head: file1: No such file or directory\nhead: file2: No such file or directory"
+      "head: head.js: No such file or directory\nhead: tail.js: No such file or directory"
     );
   });
-});
-
-describe("getContent", () => {
   it("should return the file content by bit wise for input arguement as -c", () => {
-    deepEqual(getContent(["-c2", "file1"], fs, "tail"), "e1");
+    deepEqual(getContent(["-c2", "file1"], fs, "tail"), "le");
   });
   it("should return empty string for 0 as the input", () => {
     deepEqual(getContent(["-c0", "file1"], fs, "tail"), "");
@@ -69,7 +69,7 @@ describe("getContent", () => {
     );
   });
   it("should return empty string for 0 as the input", () => {
-    deepEqual(getContent(["-c1", "file1"], fs, "tail"), "1");
+    deepEqual(getContent(["-c1", "file1"], fs, "tail"), "e");
   });
   it("should return the error message for the invalid arguements", () => {
     deepEqual(
@@ -78,37 +78,45 @@ describe("getContent", () => {
     );
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "file1");
+    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "My telephone receiver slams down on its cradle");
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
-    deepEqual(getContent(["-n2", "file1\n"], fs, "tail"), "file1");
+    deepEqual(getContent(["-n2", "file1"], fs, "tail"), "My telephone receiver slams down on its cradle");
   });
   it("should return the file content by line wise count for input arguement as -n", () => {
     deepEqual(
       getContent(
-        ["-n2", "file1"],
-        { readFileSync: readFileSync, existsSync: notExistsSync },
+        ["-n2", "leela.js"],
+        fs,
         "tail"
       ),
-      "tail: file1: No such file or directory"
+      "tail: leela.js: No such file or directory"
     );
   });
   it("should return file contents for the multiple files", () => {
     deepEqual(
       getContent(["-c2", "file1", "file2"], fs, "tail"),
-      "==> file1 <==\ne1\n==> file2 <==\ne2"
+      "==> file1 <==\nle\n==> file2 <==\nry"
     );
     deepEqual(
       getContent(["-n2", "file1", "file2"], fs, "tail"),
-      "==> file1 <==\nfile1\n==> file2 <==\nfile2"
+      "==> file1 <==\nMy telephone receiver slams down on its cradle\n==> file2 <==\nShe obviously spends every non-working hour in thorough personal exploration of all things culinary"
     );
     deepEqual(
       getContent(
-        ["-n2", "file1", "file2"],
-        { readFileSync: readFileSync, existsSync: notExistsSync },
+        ["-n2", "mobile.js", "iphone"],
+        fs,
         "tail"
       ),
-      "tail: file1: No such file or directory\ntail: file2: No such file or directory"
+      "tail: mobile.js: No such file or directory\ntail: iphone: No such file or directory"
     );
   });
+});
+
+
+describe('contentMapper',() => {
+  it('should map the contents of the files and resturn as per the input in array',() => {
+    deepEqual(contentMapper(["-n2", "file1"],fs,"head"),["My telephone receiver slams down on its cradle"])
+  });
+
 });
