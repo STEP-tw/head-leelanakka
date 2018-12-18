@@ -15,7 +15,7 @@ const tail = function(string, numberOfLines, delimiter) {
 };
 
 const headerText = function(fileName) {
-  return "==> " + fileName + " <==";
+  return `==> ${fileName} <==`;
 };
 
 module.exports = {
