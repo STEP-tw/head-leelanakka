@@ -1,22 +1,11 @@
-const {
-  headerText,
-  head,
-  tail
-} = require("../src/util/string.js");
+const { headerText, head, tail } = require("../src/util/string.js");
 
 const { parseInputs } = require("../src/parseInputs.js");
 
-const invalidRangeMessage = function(option, range, utility) {
-  let message = {
-    head: { c: "byte count", n: "line count" },
-    tail: { c: "offset", n: "offset" }
-  };
-  return `${utility}: illegal ${message[utility][option]} -- ${range}`;
-};
-
-const invalidFilesMessage = function(fileName, utility) {
-  return `${utility}: ${fileName}: No such file or directory`;
-};
+const {
+  invalidFilesMessage,
+  invalidRangeMessage
+} = require("../src/errorHandling.js");
 
 const contentMapper = function(args, fs, utility) {
   const { readFileSync, existsSync } = fs;
@@ -60,7 +49,5 @@ const getContent = function(args, fs, utility) {
 };
 
 module.exports = {
-  getContent,
-  invalidRangeMessage,
-  invalidFilesMessage
+  getContent
 };
