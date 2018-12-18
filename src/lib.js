@@ -9,10 +9,9 @@ const {
 
 const contentMapper = function(args, fs, utility) {
   const { readFileSync, existsSync } = fs;
-  let contents = { head: head, tail: tail };
-  let { files, range, delimiter } = parseInputs(args);
-  let result = [];
-  result = files.map(function(file) {
+  const contents = { head: head, tail: tail };
+  const { files, range, delimiter } = parseInputs(args);
+  return files.map(function(file) {
     if (!existsSync(file, "utf-8")) {
       return invalidFilesMessage(file, utility);
     }
@@ -27,7 +26,6 @@ const contentMapper = function(args, fs, utility) {
     }
     return headerText(file) + "\n" + output;
   });
-  return result;
 };
 
 const getContent = function(args, fs, utility) {
