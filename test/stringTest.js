@@ -1,25 +1,25 @@
 const { equal, deepEqual } = require("assert");
 
 const {
-  headContents,
-  tailContents,
+  head,
+  tail,
   headerText
 } = require("../src/util/string.js");
 
-describe("headContents", () => {
+describe("head", () => {
   it("it should return nothing when we give 0 as input ", () => {
-    equal(headContents("leela", 0, "\n"), "");
-    equal(headContents("prasanth", 0, ""), "");
+    equal(head("leela", 0, "\n"), "");
+    equal(head("prasanth", 0, ""), "");
   });
 
   it("it should return one line if we give 1 as input", () => {
-    equal(headContents("leela\nprasanth", 1, "\n"), "leela");
-    equal(headContents("head", 1, ""), "h");
+    equal(head("leela\nprasanth", 1, "\n"), "leela");
+    equal(head("head", 1, ""), "h");
   });
 
   it("it should return those many number of lines as per input", () => {
-    equal(headContents("leela\nprasanth\nnakka", 2, "\n"), "leela\nprasanth");
-    equal(headContents("head", 4, ""), "head");
+    equal(head("leela\nprasanth\nnakka", 2, "\n"), "leela\nprasanth");
+    equal(head("head", 4, ""), "head");
   });
 
   it("it should return those many number of lines as per input", () => {
@@ -27,33 +27,33 @@ describe("headContents", () => {
       "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
     let expectedOutPut =
       "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon";
-    equal(headContents(input, 2, "\n"), expectedOutPut);
-    equal(headContents("h\ne\na\nd", 4, ""), "h\ne\n");
+    equal(head(input, 2, "\n"), expectedOutPut);
+    equal(head("h\ne\na\nd", 4, ""), "h\ne\n");
   });
 });
 
-describe("tailContents", () => {
+describe("tail", () => {
   it("should return the last character of the file", () => {
-    equal(tailContents("leela", 1, ""), "a");
-    equal(tailContents("leela\nprasanth", 1, "\n"), "prasanth");
+    equal(tail("leela", 1, ""), "a");
+    equal(tail("leela\nprasanth", 1, "\n"), "prasanth");
   });
   it("should return the content based on the delimiter", () => {
     let input =
       "Ever man are put down his very And marry may table him avoid\nHard sell it were into it upon\nHe forbade affixed parties of assured to me windows";
-    equal(tailContents(input, 2, ""), "ws");
-    equal(tailContents(input, 9, ""), "e windows");
+    equal(tail(input, 2, ""), "ws");
+    equal(tail(input, 9, ""), "e windows");
     equal(
-      tailContents(input, 1, "\n"),
+      tail(input, 1, "\n"),
       "He forbade affixed parties of assured to me windows"
     );
     equal(
-      tailContents(input, 2, "\n"),
+      tail(input, 2, "\n"),
       "Hard sell it were into it upon\nHe forbade affixed parties of assured to me windows"
     );
   });
   it("should tail the contents based on the number and delimiter", () => {
-    equal(tailContents("h\ne\na\nd", 2, "\n"), "a\nd");
-    equal(tailContents("h\ne\na\nd", 2, ""), "\nd");
+    equal(tail("h\ne\na\nd", 2, "\n"), "a\nd");
+    equal(tail("h\ne\na\nd", 2, ""), "\nd");
   });
 });
 

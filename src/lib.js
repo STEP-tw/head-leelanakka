@@ -1,7 +1,7 @@
 const {
   headerText,
-  headContents,
-  tailContents
+  head,
+  tail
 } = require("../src/util/string.js");
 
 const { parseInputs } = require("../src/parseInputs.js");
@@ -22,7 +22,7 @@ const invalidFilesMessage = function(fileName, functionName) {
 
 const contentMapper = function(args, fs, command) {
   const { readFileSync, existsSync } = fs;
-  let contents = { head: headContents, tail: tailContents };
+  let contents = { head: head, tail: tail };
   let { files, range, delimiter } = parseInputs(args);
   let result = [];
   result = files.map(function(file) {
