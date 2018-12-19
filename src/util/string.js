@@ -7,9 +7,6 @@ const head = function(string, numberOfLines, delimiter) {
 
 const tail = function(string, numberOfLines, delimiter) {
   let content = string.split(delimiter).reverse();
-  if (content[0] == "") {
-    content = content.slice(1);
-  }
   content = content.slice(0, numberOfLines).reverse();
   return content.join(delimiter);
 };
