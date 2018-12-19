@@ -180,5 +180,4 @@ describe("parseInputs", () => {
       files: ["files1", "files2", "files3"],
       delimiter: "\n"
     });
-  });
-});
+  }); });
