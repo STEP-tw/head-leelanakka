@@ -55,6 +55,10 @@ describe("tail", () => {
     equal(tail("h\ne\na\nd", 2, "\n"), "a\nd");
     equal(tail("h\ne\na\nd", 2, ""), "\nd");
   });
+  it('should trim the empty line if string contains empty line at the end', () => {
+    equal(tail("t\na\ni\nl\n",2,"\n"),"i\nl");
+    equal(tail("tail\nhead\n",1,"\n"),"head");
+  })
 });
 
 describe("headerText", () => {
