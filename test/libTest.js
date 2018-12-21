@@ -17,6 +17,14 @@ describe("getContent", () => {
     assert.deepEqual(getContent(["-c2", "file1"], fs, "head"), "My");
   });
 
+  it("should return the file content by line wise for input arguement as direct number", () => {
+    assert.deepEqual(getContent(["2", "file1"], fs, "head"), "My\ntelephone");
+  });
+
+  it("should return the file content by line wise for input arguement for negative number", () => {
+    assert.deepEqual(getContent(["-2", "file1"], fs, "head"), "My\ntelephone");
+  });
+
   it("should return the error message for the invalid arguements", () => {
     assert.deepEqual(
       getContent(["-c", "file1"], fs, "head"),
@@ -119,9 +127,11 @@ describe("getContent", () => {
   });
 
   it("should return the contents of the file and error message for the second file which is not present", () => {
-    assert.deepEqual(getContent(["-n2","file1","head.js"],fs,"tail"),"==> file1 <==\nits\ncradle\ntail: head.js: No such file or directory")
+    assert.deepEqual(
+      getContent(["-n2", "file1", "head.js"], fs, "tail"),
+      "==> file1 <==\nits\ncradle\ntail: head.js: No such file or directory"
+    );
   });
-
 });
 
 describe("contentMapper", () => {
