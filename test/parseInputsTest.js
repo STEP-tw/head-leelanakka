@@ -3,9 +3,15 @@ const { parseInputs, extractNumber } = require("../src/parseInputs.js");
 const assert = require("assert");
 
 describe("extractNumber", () => {
-  it("should return only number in an array of elements", () => {
+  it("should return only number in an array of elements if we specify the negative number", () => {
     assert.deepEqual(extractNumber([2, "file"], ""), 2);
+  });
+
+  it("should return only number in an array of elements if we specify the postive number", () => {
     assert.deepEqual(extractNumber([-2, "file"], ""), -2);
+  });
+
+  it("should return only number in an array of elements if we give the combination of letter and number", () => {
     assert.deepEqual(extractNumber(["-c2", "file"], "n"), 2);
     assert.deepEqual(extractNumber(["-r2", "file"], "n"), 2);
   });
@@ -180,4 +186,5 @@ describe("parseInputs", () => {
       files: ["files1", "files2", "files3"],
       delimiter: "\n"
     });
-  }); });
+  });
+});
